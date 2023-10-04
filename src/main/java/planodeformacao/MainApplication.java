@@ -1,6 +1,8 @@
 package planodeformacao;
+
 import planodeformacao.produto.Produto;
 import planodeformacao.produto.ProdutoService;
+
 public class MainApplication {
     public static void main(String[] args) {
 
@@ -59,7 +61,7 @@ public class MainApplication {
         }
         System.out.println("------------------------------------------------------");
         produtoService.deletarProduto(produto4.getId());
-        System.out.println("Produto deletado: " + produto4.getNome()+ " "
+        System.out.println("Produto deletado: " + produto4.getNome() + " "
                 + produto4.getPreco());
         produtoService.listarProdutos();
         System.out.println("Lista de produtos:");

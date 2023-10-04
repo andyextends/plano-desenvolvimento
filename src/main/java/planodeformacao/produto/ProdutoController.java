@@ -1,7 +1,6 @@
 package planodeformacao.produto;
 
 
-
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,14 +27,17 @@ public class ProdutoController {
     public Produto criarProduto(@RequestBody Produto produto) {
         return produtoService.criarProduto(produto);
     }
+
     @GetMapping
     public List<Produto> listarProdutos() {
         return produtoService.listarProdutos();
     }
+
     @PutMapping("/{id}")
     public Produto atualizarProduto(@PathVariable Long id, @RequestBody Produto produto) {
         return produtoService.atualizarProduto(id, produto);
     }
+
     @DeleteMapping("/{id}")
     public void deletarProduto(@PathVariable Long id) {
         produtoService.deletarProduto(id);
