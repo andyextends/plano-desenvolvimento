@@ -4,10 +4,11 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+
 @Service
 public class ProdutoService {
 
-    public ProdutoService( ) {
+    public ProdutoService() {
 
 
     }
@@ -33,23 +34,25 @@ public class ProdutoService {
         }
         return null;
     }
-     public Produto atualizarProduto(Long id, Produto produto) {
-         Produto produtoAtualizado = buscarProduto(id);
-         if (produtoAtualizado != null) {
-             produtoAtualizado.setNome(produto.getNome());
-             produtoAtualizado.setPreco(produto.getPreco());
-         }
-         return produtoAtualizado;
-     }
+
+    public Produto atualizarProduto(Long id, Produto produto) {
+        Produto produtoAtualizado = buscarProduto(id);
+        if (produtoAtualizado != null) {
+            produtoAtualizado.setNome(produto.getNome());
+            produtoAtualizado.setPreco(produto.getPreco());
+        }
+        return produtoAtualizado;
+    }
 
     public void deletarProduto(Long id) {
         Produto produtoDeletado = buscarProduto(id);
         if (produtoDeletado != null) {
             produtos.remove(produtoDeletado);
-            System.out.println(produtoDeletado.getNome()+"  foi removido com sucesso.");
-        } else { System.out.println(produtoDeletado.getNome()+ " não foi encontrado.");
+            System.out.println(produtoDeletado.getNome() + "  foi removido com sucesso.");
+        } else {
+            System.out.println(produtoDeletado.getNome() + " não foi encontrado.");
         }
 
 
-}
+    }
 }

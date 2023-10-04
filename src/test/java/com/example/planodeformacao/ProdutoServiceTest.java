@@ -11,13 +11,15 @@ import java.util.List;
 
 public class ProdutoServiceTest {
     private ProdutoService produtoService;
+
     @BeforeEach
     public void setUp() {
         produtoService = new ProdutoService();
     }
+
     @Test
     public void criarProduto() {
-        Produto produto = new Produto(null , null, 0.0);
+        Produto produto = new Produto(null, null, 0.0);
         produto.setNome("Produto 1");
         produto.setPreco(10.0);
         Produto produtoCriado = produtoService.criarProduto(produto);
@@ -29,6 +31,7 @@ public class ProdutoServiceTest {
         assertEquals(produto.getId(), produtoCriado.getId());
         assertEquals(produtoService.criarProduto(produto), produtoCriado);
     }
+
     @Test
     public void listarProdutos() {
         Produto produto1 = new Produto(null, "Produto 1", 19.99);
@@ -47,6 +50,7 @@ public class ProdutoServiceTest {
         assertEquals(produto3, produtos.get(2));
         assertEquals(produto4, produtos.get(3));
     }
+
     @Test
     public void buscarProduto() {
         Produto produto1 = new Produto(null, "Produto 1", 19.99);
@@ -63,6 +67,7 @@ public class ProdutoServiceTest {
         assertEquals(produto3.getNome(), produtoBuscado.getNome());
         assertEquals(produto2.getPreco(), produtoBuscado.getPreco());
     }
+
     @Test
     public void atualizarProduto() {
         Produto produto1 = new Produto(null, "Produto 1", 19.99);
@@ -80,6 +85,7 @@ public class ProdutoServiceTest {
         assertEquals(produtoAtualizado.getNome(), produto.getNome());
         assertEquals(produtoAtualizado.getPreco(), produto.getPreco());
     }
+
     @Test
     public void deletarProduto() {
         Produto produto1 = new Produto(null, "Produto 1", 19.99);
@@ -94,7 +100,6 @@ public class ProdutoServiceTest {
         List<Produto> produtos = produtoService.listarProdutos();
         assertNotNull(produtos);
         assertEquals(3, produtos.size());
-
 
 
     }
