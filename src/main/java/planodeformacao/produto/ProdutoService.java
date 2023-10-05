@@ -26,7 +26,7 @@ public class ProdutoService {
         return produtos;
     }
 
-    public Produto buscarProduto(Long id) {
+    private Produto buscarProduto(Long id) {
         for (Produto produto : produtos) {
             if (produto.getId().equals(id)) {
                 return produto;
@@ -44,15 +44,16 @@ public class ProdutoService {
         return produtoAtualizado;
     }
 
-    public void deletarProduto(Long id) {
+    public Produto deletarProduto(Long id) {
         Produto produtoDeletado = buscarProduto(id);
         if (produtoDeletado != null) {
             produtos.remove(produtoDeletado);
             System.out.println(produtoDeletado.getNome() + "  foi removido com sucesso.");
         } else {
-            System.out.println(produtoDeletado.getNome() + " não foi encontrado.");
+            System.out.println("Produto com Id: " + id + " não encontrado.");
         }
 
 
+        return produtoDeletado;
     }
 }

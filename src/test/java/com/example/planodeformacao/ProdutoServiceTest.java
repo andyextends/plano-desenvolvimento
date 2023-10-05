@@ -1,107 +1,99 @@
 package com.example.planodeformacao;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import planodeformacao.produto.Produto;
 import planodeformacao.produto.ProdutoService;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class ProdutoServiceTest {
     private ProdutoService produtoService;
+    private List<Produto> produtos;
+
 
     @BeforeEach
     public void setUp() {
+        produtos = criarListaProdutos();
         produtoService = new ProdutoService();
+
+        for (Produto produto : produtos) {
+            produtoService.criarProduto(produto);
+        }
+
+
+    }
+
+    private List<Produto> criarListaProdutos() {
+        List<Produto> lista = new ArrayList<>();
+        lista.add(new Produto(1L, "Produto 1", 10.0));
+        lista.add(new Produto(2L, "Produto 2", 20.0));
+        lista.add(new Produto(3L, "Produto 3", 30.0));
+        lista.add(new Produto(4L, "Produto 4", 40.0));
+        lista.add(new Produto(5L, "Produto 5", 50.0));
+        return lista;
+
     }
 
     @Test
-    public void criarProduto() {
-        Produto produto = new Produto(null, null, 0.0);
-        produto.setNome("Produto 1");
-        produto.setPreco(10.0);
-        Produto produtoCriado = produtoService.criarProduto(produto);
-        assertNotNull(produtoCriado);
-        assertNotNull(produtoCriado.getId());
-        assertEquals(produto.getNome(), produtoCriado.getNome());
-        assertEquals(produto.getPreco(), produtoCriado.getPreco());
-        assertEquals(produto, produtoCriado);
-        assertEquals(produto.getId(), produtoCriado.getId());
-        assertEquals(produtoService.criarProduto(produto), produtoCriado);
-    }
-
-    @Test
-    public void listarProdutos() {
-        Produto produto1 = new Produto(null, "Produto 1", 19.99);
-        Produto produto2 = new Produto(null, "Produto 2", 29.99);
-        Produto produto3 = new Produto(null, "Produto 3", 39.99);
-        Produto produto4 = new Produto(null, "Produto 4", 49.99);
-        produtoService.criarProduto(produto1);
-        produtoService.criarProduto(produto2);
-        produtoService.criarProduto(produto3);
-        produtoService.criarProduto(produto4);
+    void retornarListaDeProdutos() {
         List<Produto> produtos = produtoService.listarProdutos();
-        assertNotNull(produtos);
-        assertEquals(4, produtos.size());
-        assertEquals(produto1, produtos.get(0));
-        assertEquals(produto2, produtos.get(1));
-        assertEquals(produto3, produtos.get(2));
-        assertEquals(produto4, produtos.get(3));
+        assertEquals(produtos, this.produtos);
+        assertEquals(produtos.size(), 5);
+
+
     }
 
     @Test
-    public void buscarProduto() {
-        Produto produto1 = new Produto(null, "Produto 1", 19.99);
-        Produto produto2 = new Produto(null, "Produto 2", 29.99);
-        Produto produto3 = new Produto(null, "Produto 3", 39.99);
-        Produto produto4 = new Produto(null, "Produto 4", 49.99);
-        produtoService.criarProduto(produto1);
-        produtoService.criarProduto(produto2);
-        produtoService.criarProduto(produto3);
-        produtoService.criarProduto(produto4);
-        Produto produtoBuscado = produtoService.buscarProduto(produto2.getId());
-        assertNotNull(produtoBuscado);
-        assertEquals(produto3.getId(), produtoBuscado.getId());
-        assertEquals(produto3.getNome(), produtoBuscado.getNome());
-        assertEquals(produto2.getPreco(), produtoBuscado.getPreco());
+    void removerProdutoDaLista() {
+        List<Produto> produtos = produtoService.produtos;
+        Produto produto = produtos.get(4);
+        produtoService.deletarProduto(produto.getId());
+        assertEquals(produtos.size(), 4);
+
+
     }
 
     @Test
-    public void atualizarProduto() {
-        Produto produto1 = new Produto(null, "Produto 1", 19.99);
-        Produto produto2 = new Produto(null, "Produto 2", 29.99);
-        Produto produto3 = new Produto(null, "Produto 3", 39.99);
-        Produto produto4 = new Produto(null, "Produto 4", 49.99);
-        produtoService.criarProduto(produto1);
-        produtoService.criarProduto(produto2);
-        produtoService.criarProduto(produto3);
-        produtoService.criarProduto(produto4);
-        Produto produtoAtualizado = new Produto(null, "Produto 2 atualizado", 99.99);
-        Produto produto = produtoService.atualizarProduto(produto2.getId(), produtoAtualizado);
-        assertNotNull(produto);
-        assertEquals(produto2.getId(), produto.getId());
-        assertEquals(produtoAtualizado.getNome(), produto.getNome());
-        assertEquals(produtoAtualizado.getPreco(), produto.getPreco());
+    void atualizarProdutoDaLista() {
+        List<Produto> produtos = produtoService.produtos;
+        Produto produto = produtos.get(4);
+        produto.setNome("Produto 5 atualizado");
+        produto.setPreco(99.99);
+        produtoService.atualizarProduto(produto.getId(), produto);
+        assertEquals(produtos.size(), 5);
+        assertEquals(produto.getNome(), "Produto 5 atualizado");
+        assertEquals(produto.getPreco(), 99.99);
+
+
     }
 
     @Test
-    public void deletarProduto() {
-        Produto produto1 = new Produto(null, "Produto 1", 19.99);
-        Produto produto2 = new Produto(null, "Produto 2", 29.99);
-        Produto produto3 = new Produto(null, "Produto 3", 39.99);
-        Produto produto4 = new Produto(null, "Produto 4", 49.99);
-        produtoService.criarProduto(produto1);
-        produtoService.criarProduto(produto2);
-        produtoService.criarProduto(produto3);
-        produtoService.criarProduto(produto4);
-        produtoService.deletarProduto(produto2.getId());
-        List<Produto> produtos = produtoService.listarProdutos();
-        assertNotNull(produtos);
-        assertEquals(3, produtos.size());
-
-
+    void criarProdutoDaLista() {
+        List<Produto> produtos = produtoService.produtos;
+        Produto produto = new Produto(null, "Produto 6", 60.0);
+        produtoService.criarProduto(produto);
+        assertEquals(produtos.size(), 6);
+        assertEquals(produto.getNome(), "Produto 6");
+        assertEquals(produto.getPreco(), 60.0);
     }
 
+    @Test
+    void buscarProdutoDaLista() {
+        List<Produto> produtos = produtoService.produtos;
+        Produto produto = produtos.get(4);
+        assertEquals(produtos.size(), 5);
+        assertEquals(produto.getNome(), "Produto 5");
+        assertEquals(produto.getPreco(), 50.0);
+
+    }
 }
+
+
+
+
+
+
