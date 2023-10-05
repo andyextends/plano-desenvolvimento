@@ -49,10 +49,11 @@ public class ProdutoServiceTest {
 
     @Test
     void removerProdutoDaLista() {
+
         List<Produto> produtos = produtoService.produtos;
         Produto produto = produtos.get(4);
         produtoService.deletarProduto(produto.getId());
-        assertEquals(produtos.size(), 4);
+        assertEquals(4, produtos.size());
 
 
     }
