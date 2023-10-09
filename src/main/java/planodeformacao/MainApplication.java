@@ -1,5 +1,6 @@
 package planodeformacao;
 
+import planodeformacao.produto.Camisa;
 import planodeformacao.produto.Produto;
 import planodeformacao.produto.ProdutoService;
 
@@ -10,6 +11,8 @@ public class MainApplication {
         ProdutoService produtoService = new ProdutoService();
 
         Produto produto1 = new Produto(null, "Produto 1", 19.99);
+
+
         Produto produtocadastrado1 = produtoService.criarProduto(produto1);
         Produto produto2 = new Produto(null, "Produto 2", 29.99);
         Produto produtocadastrado2 = produtoService.criarProduto(produto2);
@@ -17,11 +20,15 @@ public class MainApplication {
         Produto produtocadastrado3 = produtoService.criarProduto(produto3);
         Produto produto4 = new Produto(null, "Produto 4", 49.99);
         Produto produtocadastrado4 = produtoService.criarProduto(produto4);
+        Camisa camisa1 = new Camisa(null, "Camisa 1", 19.99, "M", "Azul");
+        Produto produtocadastrado6 = produtoService.criarProduto(camisa1);
 
         System.out.println("Produto cadastrado: " + produtocadastrado1.getNome() + " " + produtocadastrado1.getPreco());
         System.out.println("Produto cadastrado: " + produtocadastrado2.getNome() + " " + produtocadastrado2.getPreco());
         System.out.println("Produto cadastrado: " + produtocadastrado3.getNome() + " " + produtocadastrado3.getPreco());
         System.out.println("Produto cadastrado: " + produtocadastrado4.getNome() + " " + produtocadastrado4.getPreco());
+        System.out.println("Produto cadastrado: " + produtocadastrado6.getNome() + " " + produtocadastrado6.getPreco()
+                +" Tamanho "+((Camisa) produtocadastrado6).getTamanho()+" Cor "+((Camisa) produtocadastrado6).getCor());
         System.out.println("------------------------------------------------------");
         produtoService.deletarProduto(produtocadastrado1.getId());
         produtoService.deletarProduto(produtocadastrado2.getId());
