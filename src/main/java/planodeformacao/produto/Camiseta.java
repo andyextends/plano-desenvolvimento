@@ -2,7 +2,7 @@ package planodeformacao.produto;
 
 
 
-public class Camisa extends Produto {
+public class Camiseta extends Produto {
     public enum TipoGola {
         GOLA_V, GOLA_ROLE, GOLA_CARECA, GOLA_POLO
     }
@@ -11,7 +11,7 @@ public class Camisa extends Produto {
     private String cor;
     private TipoGola tipoGola;
 
-    public Camisa(Long id, String nome, double preco, String tamanho, String cor, TipoGola tipoGola) {
+    public Camiseta(Long id, String nome, double preco, String tamanho, String cor, TipoGola tipoGola) {
         super(id, nome, preco);
         this.tamanho = tamanho;
         this.cor = cor;

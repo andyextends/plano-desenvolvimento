@@ -1,6 +1,6 @@
 package planodeformacao;
 
-import planodeformacao.produto.Camisa;
+import planodeformacao.produto.Camiseta;
 import planodeformacao.produto.Produto;
 import planodeformacao.produto.ProdutoService;
 
@@ -20,15 +20,15 @@ public class MainApplication {
         Produto produtocadastrado3 = produtoService.criarProduto(produto3);
         Produto produto4 = new Produto(null, "Produto 4", 49.99);
         Produto produtocadastrado4 = produtoService.criarProduto(produto4);
-        Camisa camisa1 = new Camisa(null, "Camisa 1", 19.99, "M", "Azul", Camisa.TipoGola.GOLA_V);
-        Produto produtocadastrado6 = produtoService.criarProduto(camisa1);
+        Camiseta camiseta1 = new Camiseta(null, "Camisa 1", 19.99, "M", "Azul", Camiseta.TipoGola.GOLA_V);
+        Produto produtocadastrado6 = produtoService.criarProduto(camiseta1);
 
         System.out.println("Produto cadastrado: " + produtocadastrado1.getNome() + " " + produtocadastrado1.getPreco());
         System.out.println("Produto cadastrado: " + produtocadastrado2.getNome() + " " + produtocadastrado2.getPreco());
         System.out.println("Produto cadastrado: " + produtocadastrado3.getNome() + " " + produtocadastrado3.getPreco());
         System.out.println("Produto cadastrado: " + produtocadastrado4.getNome() + " " + produtocadastrado4.getPreco());
         System.out.println("Produto cadastrado: " + produtocadastrado6.getNome() + " " + produtocadastrado6.getPreco()
-                +" Tamanho "+((Camisa) produtocadastrado6).getTamanho()+" Cor "+((Camisa) produtocadastrado6).getCor()+" Tipo de Gola "+((Camisa) produtocadastrado6).getTipoGola());
+                +" Tamanho "+((Camiseta) produtocadastrado6).getTamanho()+" Cor "+((Camiseta) produtocadastrado6).getCor()+" Tipo de Gola "+((Camiseta) produtocadastrado6).getTipoGola());
         System.out.println("------------------------------------------------------");
         produtoService.deletarProduto(produtocadastrado1.getId());
         produtoService.deletarProduto(produtocadastrado2.getId());
