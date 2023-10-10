@@ -2,11 +2,11 @@ package planodeformacao.produto;
 
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class ProdutoService {
+  
 
     public ProdutoService() {
 
@@ -16,7 +16,8 @@ public class ProdutoService {
     public List<Produto> produtos = new ArrayList<>();
 
     public Produto criarProduto(Produto produto) {
-        produto.setId(System.currentTimeMillis());
+        long novoId = Objects.hash(produto.getNome(), produto.getPreco());
+        produto.setId(novoId);
         produtos.add(produto);
         return produto;
     }
@@ -36,24 +37,46 @@ public class ProdutoService {
     }
 
     public Produto atualizarProduto(Long id, Produto produto) {
-        Produto produtoAtualizado = buscarProduto(id);
-        if (produtoAtualizado != null) {
-            produtoAtualizado.setNome(produto.getNome());
-            produtoAtualizado.setPreco(produto.getPreco());
+        try {
+            Produto produtoAtualizado = buscarProduto(id);
+            if (produtoAtualizado != null) {
+                produtoAtualizado.setNome(produto.getNome());
+                produtoAtualizado.setPreco(produto.getPreco());
+            } else {
+                throw new IllegalArgumentException("Produto não encontrado com o ID" + id);
+            }
+            return produtoAtualizado;
+        } catch (Exception e) {
+            throw new RuntimeException("Erro ao atualizar produto" + e.getMessage());
         }
-        return produtoAtualizado;
     }
 
-    public Produto deletarProduto(Long id) {
-        Produto produtoDeletado = buscarProduto(id);
-        if (produtoDeletado != null) {
-            produtos.remove(produtoDeletado);
-            System.out.println(produtoDeletado.getNome() + "  foi removido com sucesso.");
-        } else {
-            System.out.println("Produto com Id: " + id + " não encontrado.");
+    public boolean deletarProduto(Long id) {
+        try {
+
+
+            Produto produtoDeletado = buscarProduto(id);
+            if (produtoDeletado != null) {
+
+                produtos.remove(produtoDeletado);
+
+                System.out.println(produtoDeletado.getNome() + " foi removido com sucesso.");
+                return true;
+            } else {
+                System.out.println("Produto já foi deletado com o ID" + "" + id);
+                return false;
+            }
+
+        } catch (Exception e) {
+            throw new RuntimeException("Erro ao deletar produto" + e.getMessage());
         }
-
-
-        return produtoDeletado;
     }
 }
+
+
+
+
+
+
+
+
