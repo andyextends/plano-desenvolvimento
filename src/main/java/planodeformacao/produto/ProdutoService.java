@@ -15,11 +15,15 @@ public class ProdutoService {
 
     public List<Produto> produtos = new ArrayList<>();
 
-    public Produto criarProduto(Produto produto) {
-        long novoId = Objects.hash(produto.getNome(), produto.getPreco());
-        produto.setId(novoId);
-        produtos.add(produto);
-        return produto;
+public Produto criarProduto(Produto produto) {
+        try {
+            long novoId = Objects.hash(produto.getNome(), produto.getPreco());
+            produto.setId(novoId);
+            produtos.add(produto);
+            return produto;
+        } catch (IllegalArgumentException | IllegalStateException e) {
+            throw new RuntimeException("Erro ao criar produto" + e.getMessage());
+        }
     }
 
     public List<Produto> listarProdutos() {
@@ -27,7 +31,7 @@ public class ProdutoService {
         return produtos;
     }
 
-    private Produto buscarProduto(Long id) {
+    public Produto buscarProduto(Long id) {
         for (Produto produto : produtos) {
             if (produto.getId().equals(id)) {
                 return produto;
@@ -46,7 +50,7 @@ public class ProdutoService {
                 throw new IllegalArgumentException("Produto não encontrado com o ID" + id);
             }
             return produtoAtualizado;
-        } catch (Exception e) {
+        } catch (IllegalArgumentException | IllegalStateException e) {
             throw new RuntimeException("Erro ao atualizar produto" + e.getMessage());
         }
     }
@@ -67,7 +71,7 @@ public class ProdutoService {
                 return false;
             }
 
-        } catch (Exception e) {
+        } catch (IllegalArgumentException | IllegalStateException e) {
             throw new RuntimeException("Erro ao deletar produto" + e.getMessage());
         }
     }

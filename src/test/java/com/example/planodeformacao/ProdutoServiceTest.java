@@ -8,7 +8,7 @@ import planodeformacao.produto.ProdutoService;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class ProdutoServiceTest {
     private ProdutoService produtoService;
@@ -39,6 +39,30 @@ public class ProdutoServiceTest {
     }
 
     @Test
+    void criarProdutoDaLista() {
+        List<Produto> produtos = produtoService.produtos;
+        Produto produto = new Produto(null, "Produto 6", 60.0);
+        produtoService.criarProduto(produto);
+        assertEquals(produtos.size(), 6);
+        assertEquals(produto.getNome(), "Produto 6");
+        assertEquals(produto.getPreco(), 60.0);
+    }
+
+    @Test
+    void atualizarProdutoDaLista() {
+        List<Produto> produtos = produtoService.produtos;
+        Produto produto = produtos.get(4);
+        produto.setNome("Produto 5 atualizado");
+        produto.setPreco(99.99);
+        produtoService.atualizarProduto(produto.getId(), produto);
+        assertEquals(produtos.size(), 5);
+        assertEquals(produto.getNome(), "Produto 5 atualizado");
+        assertEquals(produto.getPreco(), 99.99);
+
+
+    }
+
+    @Test
     void retornarListaDeProdutos() {
         List<Produto> produtos = produtoService.listarProdutos();
         assertEquals(produtos, this.produtos);
@@ -58,29 +82,6 @@ public class ProdutoServiceTest {
 
     }
 
-    @Test
-    void atualizarProdutoDaLista() {
-        List<Produto> produtos = produtoService.produtos;
-        Produto produto = produtos.get(4);
-        produto.setNome("Produto 5 atualizado");
-        produto.setPreco(99.99);
-        produtoService.atualizarProduto(produto.getId(), produto);
-        assertEquals(produtos.size(), 5);
-        assertEquals(produto.getNome(), "Produto 5 atualizado");
-        assertEquals(produto.getPreco(), 99.99);
-
-
-    }
-
-    @Test
-    void criarProdutoDaLista() {
-        List<Produto> produtos = produtoService.produtos;
-        Produto produto = new Produto(null, "Produto 6", 60.0);
-        produtoService.criarProduto(produto);
-        assertEquals(produtos.size(), 6);
-        assertEquals(produto.getNome(), "Produto 6");
-        assertEquals(produto.getPreco(), 60.0);
-    }
 
     @Test
     void buscarProdutoDaLista() {
@@ -91,7 +92,51 @@ public class ProdutoServiceTest {
         assertEquals(produto.getPreco(), 50.0);
 
     }
+
+    @Test
+    void buscarProdutoDaListaPorId() {
+        List<Produto> produtos = produtoService.produtos;
+        Produto produto = produtos.get(4);
+        assertEquals(produtos.size(), 5);
+        assertEquals(produto.getNome(), "Produto 5");
+        assertEquals(produto.getPreco(), 50.0);
+
+    }
+
+
+    @Test
+    void atualizarProdutoNaoEncontrado() {
+        assertThrows(RuntimeException.class, () -> {
+
+            produtoService.atualizarProduto(777L, new Produto(null, "Produto Inexistente", 60.0));
+        });
+
+
+    }
+
+    @Test
+    void NaoExisteProdutoNaLista() {
+
+        List<Produto> produtos = produtoService.produtos;
+        Produto produto = produtos.get(4);
+        produtoService.deletarProduto(produto.getId());
+        produtoService.buscarProduto(produto.getId());
+        assertEquals(4, produtos.size());
+        assertEquals(produto.getNome(), "Produto 5");
+        assertEquals(produto.getPreco(), 50.0);
+        assertTrue(produtoService.buscarProduto(produto.getId()) == null);
+
+
+    }
+
+
 }
+
+
+
+
+
+
 
 
 
