@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/produtos")
@@ -34,12 +35,12 @@ public class ProdutoController {
     }
 
     @PutMapping("/{id}")
-    public Produto atualizarProduto(@PathVariable Long id, @RequestBody Produto produto) {
+    public Produto atualizarProduto(@PathVariable UUID id, @RequestBody Produto produto) {
         return produtoService.atualizarProduto(id, produto);
     }
 
     @DeleteMapping("/{id}")
-    public void deletarProduto(@PathVariable Long id) {
+    public void deletarProduto(@PathVariable UUID id) {
         produtoService.deletarProduto(id);
     }
 

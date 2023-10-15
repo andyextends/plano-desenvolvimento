@@ -1,6 +1,7 @@
 package planodeformacao.produto;
 
 
+import java.util.UUID;
 
 public class Camisa extends Produto {
     public enum TipoGola {
@@ -11,7 +12,7 @@ public class Camisa extends Produto {
     private String cor;
     private TipoGola tipoGola;
 
-    public Camisa(Long id, String nome, double preco, String tamanho, String cor, TipoGola tipoGola) {
+    public Camisa(UUID id, String nome, double preco, String tamanho, String cor, TipoGola tipoGola) {
         super(id, nome, preco);
         this.tamanho = tamanho;
         this.cor = cor;

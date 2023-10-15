@@ -7,6 +7,7 @@ import planodeformacao.produto.ProdutoService;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -29,11 +30,12 @@ public class ProdutoServiceTest {
 
     private List<Produto> criarListaProdutos() {
         List<Produto> lista = new ArrayList<>();
-        lista.add(new Produto(1L, "Produto 1", 10.0));
-        lista.add(new Produto(2L, "Produto 2", 20.0));
-        lista.add(new Produto(3L, "Produto 3", 30.0));
-        lista.add(new Produto(4L, "Produto 4", 40.0));
-        lista.add(new Produto(5L, "Produto 5", 50.0));
+        lista.add(new Produto(UUID.randomUUID(), "Produto 1", 10.0));
+        lista.add(new Produto(UUID.randomUUID(), "Produto 2", 20.0));
+        lista.add(new Produto(UUID.randomUUID(), "Produto 3", 30.0));
+        lista.add(new Produto(UUID.randomUUID(), "Produto 4", 40.0));
+        lista.add(new Produto(UUID.randomUUID(), "Produto 5", 50.0));
+
         return lista;
 
     }
@@ -108,7 +110,7 @@ public class ProdutoServiceTest {
     void atualizarProdutoNaoEncontrado() {
         assertThrows(RuntimeException.class, () -> {
 
-            produtoService.atualizarProduto(777L, new Produto(null, "Produto Inexistente", 60.0));
+            produtoService.atualizarProduto(UUID.randomUUID(), new Produto(null, "Produto Inexistente", 60.0));
         });
 
 

@@ -1,22 +1,24 @@
 package planodeformacao.produto;
 
+import java.util.UUID;
+
 public class Produto {
 
-    private Long id;
+    private UUID id;
     private String nome;
     private double preco;
 
-    public Produto(Long id, String nome, double preco) {
+    public Produto(UUID id, String nome, double preco) {
         this.id = id;
         this.nome = nome;
         this.preco = preco;
     }
 
-    public Long getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 
