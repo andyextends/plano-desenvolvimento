@@ -4,6 +4,8 @@ import planodeformacao.produto.Camisa;
 import planodeformacao.produto.Produto;
 import planodeformacao.produto.ProdutoService;
 
+import java.util.UUID;
+
 public class MainApplication {
     public static void main(String[] args) {
 
@@ -36,14 +38,14 @@ public class MainApplication {
 
         System.out.println("------------------------------------------------------");
 
-        System.out.println("Produto cadastrado: " + produto1.getNome() + " " + produto1.getPreco());
-        System.out.println("Produto cadastrado: " + produto2.getNome() + " " + produto2.getPreco());
-        System.out.println("Produto cadastrado: " + produtocriado3.getNome() + " " + produto3.getPreco());
-        System.out.println("Produto cadastrado: " + produtocriado4.getNome() + " " + produto4.getPreco());
-        System.out.println("Produto cadastrado: " + camisa1.getNome() + " " + camisa1.getPreco());
-        System.out.println("Produto cadastrado: " + camisa2.getNome() + " " + camisa2.getPreco());
-        System.out.println("Produto cadastrado: " + camisa3.getNome() + " " + camisa3.getPreco());
-        System.out.println("Produto cadastrado: " + camisa4.getNome() + " " + camisa4.getPreco());
+//        System.out.println("Produto cadastrado: " + produto1.getNome() + " " + produto1.getPreco()+""+ camisa1.getId());
+//        System.out.println("Produto cadastrado: " + produto2.getNome() + " " + produto2.getPreco());
+//        System.out.println("Produto cadastrado: " + produtocriado3.getNome() + " " + produto3.getPreco());
+//        System.out.println("Produto cadastrado: " + produtocriado4.getNome() + " " + produto4.getPreco());
+//        System.out.println("Produto cadastrado: " + camisa1.getNome() + " " + camisa1.getPreco());
+//        System.out.println("Produto cadastrado: " + camisa2.getNome() + " " + camisa2.getPreco());
+//        System.out.println("Produto cadastrado: " + camisa3.getNome() + " " + camisa3.getPreco());
+//        System.out.println("Produto cadastrado: " + camisa4.getNome() + " " + camisa4.getPreco());
         System.out.println("------------------------------------------------------");
 
         produtoService.deletarProduto(produto1.getId());
@@ -86,7 +88,7 @@ public class MainApplication {
         }
         produto5.setNome("Produto 5 atualizado");
         produto5.setPreco(99.99);
-        produtoService.atualizarProduto(produtocadastrado5.getId(), produto5);
+        produtoService.atualizarProduto(produto5.getId(), produto5);
         System.out.println("Produto atualizado: " + produtocadastrado5.getNome()
                 + " " + produtocadastrado5.getPreco());
         System.out.println("------------------------------------------------------");

@@ -15,15 +15,14 @@ public class ProdutoService {
 
     public List<Produto> produtos = new ArrayList<>();
 
-public Produto criarProduto(Produto produto) {
-        try {
-            long novoId = Objects.hash(produto.getNome(), produto.getPreco());
-            produto.setId(novoId);
-            produtos.add(produto);
-            return produto;
-        } catch (IllegalArgumentException | IllegalStateException e) {
-            throw new RuntimeException("Erro ao criar produto" + e.getMessage());
+    public Produto criarProduto(Produto produto) {
+        if (produto.getId() == null) {
+            produto.setId(UUID.randomUUID());
         }
+
+        produtos.add(produto);
+        System.out.println("Produto cadastrado: " + produto.getId() + " " + produto.getNome() + " " + produto.getPreco());
+        return produto;
     }
 
     public List<Produto> listarProdutos() {
@@ -31,16 +30,17 @@ public Produto criarProduto(Produto produto) {
         return produtos;
     }
 
-    public Produto buscarProduto(Long id) {
+    public Produto buscarProduto(UUID id) {
         for (Produto produto : produtos) {
-            if (produto.getId().equals(id)) {
+            UUID idProduto = produto.getId();
+            if (idProduto != null && produto.getId().equals(id)) {
                 return produto;
             }
         }
         return null;
     }
 
-    public Produto atualizarProduto(Long id, Produto produto) {
+    public Produto atualizarProduto(UUID id, Produto produto) {
         try {
             Produto produtoAtualizado = buscarProduto(id);
             if (produtoAtualizado != null) {
@@ -55,7 +55,7 @@ public Produto criarProduto(Produto produto) {
         }
     }
 
-    public boolean deletarProduto(Long id) {
+    public boolean deletarProduto(UUID id) {
         try {
 
 
