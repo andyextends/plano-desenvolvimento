@@ -1,16 +1,21 @@
 package planodeformacao.produto;
 
 
+import org.springframework.stereotype.Component;
+
 import java.util.UUID;
 
+@Component
 public class Camisa extends Produto {
-    public enum TipoGola {
-        GOLA_V, GOLA_ROLE, GOLA_CARECA, GOLA_POLO
-    }
+
 
     private String tamanho;
     private String cor;
     private TipoGola tipoGola;
+
+    public Camisa() {
+        super();
+    }
 
     public Camisa(UUID id, String nome, double preco, String tamanho, String cor, TipoGola tipoGola) {
         super(id, nome, preco);
@@ -18,8 +23,6 @@ public class Camisa extends Produto {
         this.cor = cor;
         this.tipoGola = tipoGola;
     }
-
-
 
     public String getTamanho() {
         return tamanho;
