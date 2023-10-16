@@ -6,6 +6,7 @@ import planodeformacao.produto.Produto;
 import planodeformacao.produto.ProdutoService;
 
 import java.util.ArrayList;
+
 import java.util.List;
 import java.util.UUID;
 
@@ -42,7 +43,7 @@ public class ProdutoServiceTest {
 
     @Test
     void criarProdutoDaLista() {
-        List<Produto> produtos = produtoService.produtos;
+        List<Produto> produtos = produtoService.listarProdutos();
         Produto produto = new Produto(null, "Produto 6", 60.0);
         produtoService.criarProduto(produto);
         assertEquals(produtos.size(), 6);
@@ -52,7 +53,7 @@ public class ProdutoServiceTest {
 
     @Test
     void atualizarProdutoDaLista() {
-        List<Produto> produtos = produtoService.produtos;
+        List<Produto> produtos = produtoService.listarProdutos();
         Produto produto = produtos.get(4);
         produto.setNome("Produto 5 atualizado");
         produto.setPreco(99.99);
@@ -76,7 +77,7 @@ public class ProdutoServiceTest {
     @Test
     void removerProdutoDaLista() {
 
-        List<Produto> produtos = produtoService.produtos;
+        List<Produto> produtos = produtoService.listarProdutos();
         Produto produto = produtos.get(4);
         produtoService.deletarProduto(produto.getId());
         assertEquals(4, produtos.size());
@@ -87,7 +88,7 @@ public class ProdutoServiceTest {
 
     @Test
     void buscarProdutoDaLista() {
-        List<Produto> produtos = produtoService.produtos;
+        List<Produto> produtos = produtoService.listarProdutos();
         Produto produto = produtos.get(4);
         assertEquals(produtos.size(), 5);
         assertEquals(produto.getNome(), "Produto 5");
@@ -97,7 +98,7 @@ public class ProdutoServiceTest {
 
     @Test
     void buscarProdutoDaListaPorId() {
-        List<Produto> produtos = produtoService.produtos;
+        List<Produto> produtos = produtoService.listarProdutos();
         Produto produto = produtos.get(4);
         assertEquals(produtos.size(), 5);
         assertEquals(produto.getNome(), "Produto 5");
@@ -119,7 +120,7 @@ public class ProdutoServiceTest {
     @Test
     void NaoExisteProdutoNaLista() {
 
-        List<Produto> produtos = produtoService.produtos;
+        List<Produto> produtos = produtoService.listarProdutos();
         Produto produto = produtos.get(4);
         produtoService.deletarProduto(produto.getId());
         produtoService.buscarProduto(produto.getId());

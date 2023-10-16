@@ -1,8 +1,14 @@
 package planodeformacao.produto;
 
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
 
 @Service
 public class ProdutoService {
@@ -13,7 +19,8 @@ public class ProdutoService {
 
     }
 
-    public List<Produto> produtos = new ArrayList<>();
+    private final Logger logger = LogManager.getLogger(ProdutoService.class);
+    private final List<Produto> produtos = new ArrayList<>();
 
     public Produto criarProduto(Produto produto) {
         if (produto.getId() == null) {
@@ -21,7 +28,7 @@ public class ProdutoService {
         }
 
         produtos.add(produto);
-        System.out.println("Produto cadastrado: " + produto.getId() + " " + produto.getNome() + " " + produto.getPreco());
+        logger.info("Produto cadastrado: " + produto.getId() + " " + produto.getNome() + " " + produto.getPreco());
         return produto;
     }
 
@@ -46,11 +53,15 @@ public class ProdutoService {
             if (produtoAtualizado != null) {
                 produtoAtualizado.setNome(produto.getNome());
                 produtoAtualizado.setPreco(produto.getPreco());
+                logger.info("Produto atualizado: " + produtoAtualizado.getId() + " " + produtoAtualizado.getNome()
+                        + " " + produtoAtualizado.getPreco());
             } else {
+                logger.error("Produto não encontrado com o ID" + id);
                 throw new IllegalArgumentException("Produto não encontrado com o ID" + id);
             }
             return produtoAtualizado;
         } catch (IllegalArgumentException | IllegalStateException e) {
+            logger.error("Erro ao atualizar produto" + e.getMessage());
             throw new RuntimeException("Erro ao atualizar produto" + e.getMessage());
         }
     }
@@ -64,14 +75,15 @@ public class ProdutoService {
 
                 produtos.remove(produtoDeletado);
 
-                System.out.println(produtoDeletado.getNome() + " foi removido com sucesso.");
+                logger.info(produtoDeletado.getNome() + " foi removido com sucesso.");
                 return true;
             } else {
-                System.out.println("Produto já foi deletado com o ID" + "" + id);
+                logger.info("Produto já foi deletado com o ID" + "" + id);
                 return false;
             }
 
         } catch (IllegalArgumentException | IllegalStateException e) {
+            logger.error("Erro ao deletar produto" + e.getMessage());
             throw new RuntimeException("Erro ao deletar produto" + e.getMessage());
         }
     }

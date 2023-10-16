@@ -1,12 +1,18 @@
 package planodeformacao.produto;
 
+import org.springframework.stereotype.Component;
+
 import java.util.UUID;
 
+@Component
 public class Produto {
 
     private UUID id;
     private String nome;
     private double preco;
+
+    public Produto() {
+    }
 
     public Produto(UUID id, String nome, double preco) {
         this.id = id;
