@@ -1,34 +1,20 @@
 package planodeformacao.produto;
 
 
-import jakarta.validation.Validator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 
 
 @Service
 public class ProdutoService {
-    private final Validator validator;
-
-    @Autowired
-    public ProdutoService(Validator validator) {
-        this.validator = validator;
 
 
-    }
-
-    public void validarProduto(Produto produto) {
-        Set<jakarta.validation.ConstraintViolation<Produto>> violations = validator.validate(produto);
-        if (!violations.isEmpty()) {
-            throw new ValidacaoException("Produto inválido");
-        }
+    public ProdutoService() {
     }
 
     private final Logger logger = LogManager.getLogger(ProdutoService.class);
@@ -38,8 +24,7 @@ public class ProdutoService {
 
         if (produto.getId() == null) {
             produto.setId(UUID.randomUUID());
-        } else {
-            throw new IllegalArgumentException("Produto já existe");
+
         }
 
 
@@ -73,7 +58,7 @@ public class ProdutoService {
                         + " " + produtoAtualizado.getPreco());
             } else {
 
-                throw new IllegalArgumentException(" Produto não encontrado com o ID" + id);
+                throw new IllegalArgumentException(" não encontramos o ID: " + id);
             }
             return produtoAtualizado;
         } catch (IllegalArgumentException | IllegalStateException e) {
