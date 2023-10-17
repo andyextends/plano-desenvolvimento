@@ -13,6 +13,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.mockito.internal.verification.VerificationModeFactory.times;
 
 class ProdutoControllerTest {
     @InjectMocks
@@ -45,6 +46,7 @@ class ProdutoControllerTest {
         when(produtoService.listarProdutos()).thenReturn(produtos);
         List<Produto> produtosListados = produtoController.listarProdutos();
         verify(produtoService).listarProdutos();
+        verify(produtoService, times(1)).listarProdutos();
         assertEquals(produtosListados.size(), 2);
         assertEquals(produtosListados.get(0).getNome(), "Produto 1");
     }
