@@ -13,7 +13,7 @@ public class PlanoDeFormacaoApplication {
     private static final Logger logger = LoggerFactory.getLogger(PlanoDeFormacaoApplication.class);
 
     public static void main(String[] args) {
-        logger.info("Produto não encontrado");
+        logger.info("Iniciando aplicação");
         SpringApplication.run(PlanoDeFormacaoApplication.class, args);
 
     }
