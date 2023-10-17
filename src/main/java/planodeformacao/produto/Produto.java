@@ -1,17 +1,15 @@
 package planodeformacao.produto;
 
 import jakarta.validation.constraints.DecimalMin;
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
-import org.springframework.stereotype.Component;
 
 import java.util.UUID;
 
-@Component
+
 public class Produto {
 
     private UUID id;
-    @NotNull(message = "O nome não pode ser nulo")
+    @NotNull(message = "O nome não pode ser vazio")
     private String nome;
     @DecimalMin(value = "0.0", inclusive = false, message = "O preço deve ser maior que zero")
     private double preco;

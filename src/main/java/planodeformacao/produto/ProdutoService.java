@@ -17,7 +17,7 @@ import java.util.UUID;
 public class ProdutoService {
     private final Validator validator;
 
-@Autowired
+    @Autowired
     public ProdutoService(Validator validator) {
         this.validator = validator;
 
@@ -35,9 +35,13 @@ public class ProdutoService {
     private final List<Produto> produtos = new ArrayList<>();
 
     public Produto criarProduto(Produto produto) {
+
         if (produto.getId() == null) {
             produto.setId(UUID.randomUUID());
+        } else {
+            throw new IllegalArgumentException("Produto já existe");
         }
+
 
         produtos.add(produto);
         logger.info("Produto cadastrado: " + produto.getId() + " " + produto.getNome() + " " + produto.getPreco());
@@ -68,12 +72,12 @@ public class ProdutoService {
                 logger.info("Produto atualizado: " + produtoAtualizado.getId() + " " + produtoAtualizado.getNome()
                         + " " + produtoAtualizado.getPreco());
             } else {
-                logger.error("Produto não encontrado com o ID" + id);
-                throw new IllegalArgumentException("Produto não encontrado com o ID" + id);
+
+                throw new IllegalArgumentException(" Produto não encontrado com o ID" + id);
             }
             return produtoAtualizado;
         } catch (IllegalArgumentException | IllegalStateException e) {
-            logger.error("Erro ao atualizar produto" + e.getMessage());
+
             throw new RuntimeException("Erro ao atualizar produto" + e.getMessage());
         }
     }
@@ -95,7 +99,7 @@ public class ProdutoService {
             }
 
         } catch (IllegalArgumentException | IllegalStateException e) {
-            logger.error("Erro ao deletar produto" + e.getMessage());
+
             throw new RuntimeException("Erro ao deletar produto" + e.getMessage());
         }
     }
