@@ -4,6 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import planodeformacao.produto.Produto;
 import planodeformacao.produto.ProdutoService;
+import planodeformacao.produto.ProdutoServiceForTest;
 
 import java.util.ArrayList;
 
@@ -13,14 +14,14 @@ import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class ProdutoServiceTest {
-    private ProdutoService produtoService;
+    private ProdutoServiceForTest produtoService;
     private List<Produto> produtos;
 
 
     @BeforeEach
     public void setUp() {
         produtos = criarListaProdutos();
-        produtoService = new ProdutoService();
+        produtoService = new ProdutoServiceForTest();
 
         for (Produto produto : produtos) {
             produtoService.criarProduto(produto);

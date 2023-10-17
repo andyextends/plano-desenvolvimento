@@ -1,15 +1,12 @@
 package planodeformacao;
 
-import planodeformacao.produto.Camisa;
-import planodeformacao.produto.Produto;
-import planodeformacao.produto.ProdutoService;
-import planodeformacao.produto.TipoGola;
+import planodeformacao.produto.*;
 
 public class MainApplication {
     public static void main(String[] args) {
 
 
-        ProdutoService produtoService = new ProdutoService();
+        ProdutoService produtoService = new ProdutoServiceForTest();
 
 
         Produto produto1 = new Produto(null, "Produto 1", 59.99);

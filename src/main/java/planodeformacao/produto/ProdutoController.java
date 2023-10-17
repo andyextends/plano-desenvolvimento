@@ -1,6 +1,7 @@
 package planodeformacao.produto;
 
 
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,7 +27,7 @@ public class ProdutoController {
     }
 
     @PostMapping
-    public Produto criarProduto(@RequestBody Produto produto) {
+    public Produto criarProduto(@Valid @RequestBody Produto produto) {
 
         return produtoService.criarProduto(produto);
     }
