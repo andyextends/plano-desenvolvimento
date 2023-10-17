@@ -1,22 +1,34 @@
 package planodeformacao.produto;
 
 
+import jakarta.validation.Validator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 
 @Service
 public class ProdutoService {
+    private final Validator validator;
+
+@Autowired
+    public ProdutoService(Validator validator) {
+        this.validator = validator;
 
 
-    public ProdutoService() {
+    }
 
-
+    public void validarProduto(Produto produto) {
+        Set<jakarta.validation.ConstraintViolation<Produto>> violations = validator.validate(produto);
+        if (!violations.isEmpty()) {
+            throw new ValidacaoException("Produto inválido");
+        }
     }
 
     private final Logger logger = LogManager.getLogger(ProdutoService.class);
