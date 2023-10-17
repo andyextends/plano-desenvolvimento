@@ -6,7 +6,7 @@ public class MainApplication {
     public static void main(String[] args) {
 
 
-        ProdutoService produtoService = new ProdutoServiceForTest();
+        ProdutoService produtoService = new ProdutoService();
 
 
         Produto produto1 = new Produto(null, "Produto 1", 59.99);
