@@ -26,6 +26,11 @@ public class ProdutoService {
             produto.setId(UUID.randomUUID());
 
         }
+        for (Produto existeProduto : produtos) {
+            if (existeProduto.getId().equals(produto.getId())) {
+                throw new IllegalArgumentException("Produto já existe com mesmo ID cadastrado");
+            }
+        }
 
 
         produtos.add(produto);
@@ -49,44 +54,38 @@ public class ProdutoService {
     }
 
     public Produto atualizarProduto(UUID id, Produto produto) {
-        try {
-            Produto produtoAtualizado = buscarProduto(id);
-            if (produtoAtualizado != null) {
-                produtoAtualizado.setNome(produto.getNome());
-                produtoAtualizado.setPreco(produto.getPreco());
-                logger.info("Produto atualizado: " + produtoAtualizado.getId() + " " + produtoAtualizado.getNome()
-                        + " " + produtoAtualizado.getPreco());
-            } else {
 
-                throw new IllegalArgumentException(" não encontramos o ID: " + id);
-            }
+        Produto produtoAtualizado = buscarProduto(id);
+        if (produtoAtualizado != null) {
+            produtoAtualizado.setNome(produto.getNome());
+            produtoAtualizado.setPreco(produto.getPreco());
+            logger.info("Produto atualizado: " + produtoAtualizado.getId() + " " + produtoAtualizado.getNome()
+                    + " " + produtoAtualizado.getPreco());
             return produtoAtualizado;
-        } catch (IllegalArgumentException | IllegalStateException e) {
+        } else {
 
-            throw new RuntimeException("Erro ao atualizar produto" + e.getMessage());
+            throw new IllegalArgumentException(" não encontramos o ID: " + id);
         }
+
+
     }
 
     public boolean deletarProduto(UUID id) {
-        try {
 
 
-            Produto produtoDeletado = buscarProduto(id);
-            if (produtoDeletado != null) {
+        Produto produtoDeletado = buscarProduto(id);
+        if (produtoDeletado != null) {
 
-                produtos.remove(produtoDeletado);
+            produtos.remove(produtoDeletado);
 
-                logger.info(produtoDeletado.getNome() + " foi removido com sucesso.");
-                return true;
-            } else {
-                logger.info("Produto já foi deletado com o ID" + "" + id);
-                return false;
-            }
-
-        } catch (IllegalArgumentException | IllegalStateException e) {
-
-            throw new RuntimeException("Erro ao deletar produto" + e.getMessage());
+            logger.info(produtoDeletado.getNome() + " foi removido com sucesso.");
+            return true;
+        } else {
+            logger.info("Produto já foi deletado com o ID" + "" + id);
+            return false;
         }
+
+
     }
 }
 
