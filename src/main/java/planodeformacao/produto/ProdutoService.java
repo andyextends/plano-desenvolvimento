@@ -3,7 +3,9 @@ package planodeformacao.produto;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -70,22 +72,23 @@ public class ProdutoService {
 
     }
 
-    public boolean deletarProduto(UUID id) {
-
-
+    public void deletarProduto(UUID id) {
+        if (id == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "ID do produto é necessário para realizar a exclusão.");
+        }
         Produto produtoDeletado = buscarProduto(id);
         if (produtoDeletado != null) {
+            if (!produtos.contains(produtoDeletado)) {
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Produto com ID" + id + "ja foi deletado anteriormente");
 
+            }
             produtos.remove(produtoDeletado);
+            logger.info(produtoDeletado.getId() + " " + produtoDeletado.getNome() + " " + produtoDeletado.getPreco() + " foi deletado com sucesso");
 
-            logger.info(produtoDeletado.getNome() + " foi removido com sucesso.");
-            return true;
         } else {
-            logger.info("Produto já foi deletado com o ID" + "" + id);
-            return false;
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Produto com ID" + id + "não foi encontrado");
+
         }
-
-
     }
 }
 
