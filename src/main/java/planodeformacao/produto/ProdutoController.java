@@ -45,22 +45,14 @@ public class ProdutoController {
 
     @GetMapping("/{id}")
     public Produto buscarProdutoPorId(@PathVariable UUID id) {
-        Produto produto = produtoService.buscarProduto(id);
-        if (produto != null) {
-            return produto;
-        } else {
-            throw new IllegalArgumentException("Produto não encontrado");
-        }
+
+     return produtoService.buscarProduto(id);
 
     }
     @GetMapping("/buscar")
     public List<Produto> buscarProdutosPorNome(@RequestParam(name = "nome") String nome) {
-        List<Produto> produtos = produtoService.buscarProdutosPorNome(nome);
-        if (produtos != null) {
-            return produtos;
-        } else {
-            throw new IllegalArgumentException("Produto não encontrado");
-        }
+
+    return produtoService.buscarProdutosPorNome(nome);
 
     }
 
