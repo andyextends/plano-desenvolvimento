@@ -90,6 +90,15 @@ public class ProdutoService {
 
         }
     }
+    public List<Produto> buscarProdutosPorNome(String nome) {
+        List<Produto> produtosEncontrados = new ArrayList<>();
+        for (Produto produto : produtos) {
+            if (produto.getNome().equalsIgnoreCase(nome)) {
+                produtosEncontrados.add(produto);
+            }
+        }
+        return produtosEncontrados;
+    }
 }
 
 
