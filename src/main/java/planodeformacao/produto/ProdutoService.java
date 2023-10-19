@@ -83,7 +83,7 @@ public class ProdutoService {
 
             }
             produtos.remove(produtoDeletado);
-            logger.info(produtoDeletado.getId() + " " + produtoDeletado.getNome() + " " + produtoDeletado.getPreco() + " foi deletado com sucesso");
+            logger.info("ID: " +produtoDeletado.getId() + " " + produtoDeletado.getNome() + " " + produtoDeletado.getPreco() + " foi deletado com sucesso");
 
         } else {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Produto com ID" + id + "não foi encontrado");

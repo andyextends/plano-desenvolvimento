@@ -50,4 +50,15 @@ public class ProdutoController {
         produtoService.deletarProduto(id);
     }
 
+    @GetMapping("/{id}")
+    public Produto buscarProdutoPorId(@PathVariable UUID id) {
+        Produto produto = produtoService.buscarProduto(id);
+        if (produto != null) {
+            return produto;
+        } else {
+            throw new IllegalArgumentException("Produto não encontrado");
+        }
+
+    }
+
 }
