@@ -46,13 +46,18 @@ public class ProdutoService {
     }
 
     public Produto buscarProduto(UUID id) {
+        if (id == null) {
+            throw new IllegalArgumentException("ID do produto não pode ser nulo.");
+        }
+
         for (Produto produto : produtos) {
             UUID idProduto = produto.getId();
-            if (idProduto != null && produto.getId().equals(id)) {
+            if (idProduto != null && idProduto.equals(id)) {
                 return produto;
             }
         }
-        return null;
+
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Produto não encontrado com o ID: " + id);
     }
 
     public Produto atualizarProduto(UUID id, Produto produto) {
@@ -83,19 +88,25 @@ public class ProdutoService {
 
             }
             produtos.remove(produtoDeletado);
-            logger.info("ID: " +produtoDeletado.getId() + " " + produtoDeletado.getNome() + " " + produtoDeletado.getPreco() + " foi deletado com sucesso");
+            logger.info("ID: " + produtoDeletado.getId() + " " + produtoDeletado.getNome() + " " + produtoDeletado.getPreco() + " foi deletado com sucesso");
 
         } else {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Produto com ID" + id + "não foi encontrado");
 
         }
     }
+
     public List<Produto> buscarProdutosPorNome(String nome) {
         List<Produto> produtosEncontrados = new ArrayList<>();
+        boolean produtoEncontrado = false;
         for (Produto produto : produtos) {
             if (produto.getNome().equalsIgnoreCase(nome)) {
                 produtosEncontrados.add(produto);
+                produtoEncontrado = true;
             }
+        }
+        if (!produtoEncontrado) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Produto com nome " + nome + " não foi encontrado");
         }
         return produtosEncontrados;
     }
