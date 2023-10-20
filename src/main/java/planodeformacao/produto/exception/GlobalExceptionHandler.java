@@ -10,9 +10,9 @@ import org.springframework.web.server.ResponseStatusException;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
-    @ExceptionHandler(MethodArgumentNotValidException.class)
+    @ExceptionHandler(ParametrosInvalidosException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ResponseEntity<String> handleBadRequestException(MethodArgumentNotValidException ex) {
+    public ResponseEntity<String> handleParametrosInvalidos(ParametrosInvalidosException ex) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Algo deu errado. Por favor, verifique os dados de cadastro e tente novamente.");
     }
 
@@ -22,9 +22,9 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> handleInternalServerError(Exception ex) {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Algo deu errado. Por favor, tente novamente.");
     }
-    @ExceptionHandler(ResponseStatusException.class)
+    @ExceptionHandler(ProdutoNaoEncontradoException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ResponseEntity<String> handleNotFoundException(ResponseStatusException ex) {
+    public ResponseEntity<String> handleProdutoNaoEncontrado(ProdutoNaoEncontradoException ex) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Dados de entrada invalido. Por favor, tente novamente.");
     }
 }
