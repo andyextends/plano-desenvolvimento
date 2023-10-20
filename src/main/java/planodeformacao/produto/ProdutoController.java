@@ -21,7 +21,7 @@ public class ProdutoController {
     }
 
     @PostMapping
-    public Produto criarProduto(@Valid @RequestBody Produto produto) {
+    public Produto criarProduto(@RequestBody Produto produto) {
 
         return produtoService.criarProduto(produto);
     }
@@ -33,20 +33,20 @@ public class ProdutoController {
     }
 
     @PutMapping("/{id}")
-    public Produto atualizarProduto(@PathVariable UUID id, @RequestBody Produto produto) {
+    public Produto atualizarProduto(@Valid @PathVariable UUID id, @RequestBody Produto produto) {
 
         return produtoService.atualizarProduto(id, produto);
     }
 
     @DeleteMapping("/{id}")
-    public void deletarProduto(@PathVariable UUID id) {
+    public void deletarProduto(@Valid @PathVariable UUID id) {
 
         produtoService.deletarProduto(id);
     }
 
     @SuppressWarnings("unused")
     @GetMapping("/{id}")
-    public Produto buscarProdutoPorId(@PathVariable UUID id) {
+    public Produto buscarProdutoPorId(@Valid @PathVariable UUID id) {
 
         return produtoService.buscarProduto(id);
 
@@ -54,7 +54,7 @@ public class ProdutoController {
 
     @SuppressWarnings("unused")
     @GetMapping("/nome{nome}")
-    public List<Produto> buscarProdutosPorNome(@RequestParam(name = "nome") String nome) {
+    public List<Produto> buscarProdutosPorNome(@Valid @RequestParam(name = "nome") String nome) {
 
         return produtoService.buscarProdutosPorNome(nome);
 
@@ -62,7 +62,7 @@ public class ProdutoController {
 
     @SuppressWarnings("unused")
     @GetMapping("/id{userId}")
-    public Produto buscarprodutoPorUserId(@RequestHeader(name = "userId") String userId) {
+    public Produto buscarprodutoPorUserId(@Valid @RequestHeader(name = "userId") String userId) {
 
         return produtoService.buscarProdutoPorUsuario(UUID.fromString(userId));
 

@@ -3,9 +3,9 @@ package planodeformacao.produto;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
+import planodeformacao.produto.exception.ParametrosInvalidosException;
+import planodeformacao.produto.exception.ProdutoNaoEncontradoException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +30,7 @@ public class ProdutoService {
         }
         for (Produto existeProduto : produtos) {
             if (existeProduto.getId().equals(produto.getId())) {
-                throw new IllegalArgumentException("Produto já existe com mesmo ID cadastrado");
+                throw new ParametrosInvalidosException("Produto já existe com mesmo ID cadastrado");
             }
         }
 
@@ -41,13 +41,16 @@ public class ProdutoService {
     }
 
     public List<Produto> listarProdutos() {
-
+        if (produtos.isEmpty()) {
+            logger.info("Não existem produtos cadastrados");
+            throw new ProdutoNaoEncontradoException("Não existem produtos cadastrados");
+        }
         return produtos;
     }
 
     public Produto buscarProduto(UUID id) {
         if (id == null) {
-            throw new IllegalArgumentException("ID do produto não pode ser nulo.");
+            throw new ParametrosInvalidosException("ID do produto não pode ser nulo.");
         }
 
         for (Produto produto : produtos) {
@@ -57,7 +60,7 @@ public class ProdutoService {
             }
         }
 
-        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Produto não encontrado com o ID: " + id);
+        throw new ProdutoNaoEncontradoException("Produto não encontrado com o ID: " + id);
     }
 
     public Produto atualizarProduto(UUID id, Produto produto) {
@@ -71,7 +74,7 @@ public class ProdutoService {
             return produtoAtualizado;
         } else {
 
-            throw new IllegalArgumentException(" não encontramos o ID: " + id);
+            throw new ProdutoNaoEncontradoException(" não encontramos o ID: " + id);
         }
 
 
@@ -79,19 +82,19 @@ public class ProdutoService {
 
     public void deletarProduto(UUID id) {
         if (id == null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "ID do produto é necessário para realizar a exclusão.");
+            throw new ParametrosInvalidosException("ID do produto é necessário para realizar a exclusão.");
         }
         Produto produtoDeletado = buscarProduto(id);
         if (produtoDeletado != null) {
             if (!produtos.contains(produtoDeletado)) {
-                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Produto com ID" + id + "ja foi deletado anteriormente");
+                throw new ParametrosInvalidosException("Produto com ID" + id + "ja foi deletado anteriormente");
 
             }
             produtos.remove(produtoDeletado);
             logger.info("ID: " + produtoDeletado.getId() + " " + produtoDeletado.getNome() + " " + produtoDeletado.getPreco() + " foi deletado com sucesso");
 
         } else {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Produto com ID" + id + "não foi encontrado");
+            throw new ProdutoNaoEncontradoException("Produto com ID" + id + "não foi encontrado");
 
         }
     }
@@ -106,7 +109,7 @@ public class ProdutoService {
             }
         }
         if (!produtoEncontrado) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Produto com nome " + nome + " não foi encontrado");
+            throw new ProdutoNaoEncontradoException("Produto com nome " + nome + " não foi encontrado");
         }
         return produtosEncontrados;
     }
@@ -117,7 +120,7 @@ public class ProdutoService {
                 return produto;
             }
         }
-        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Produto com ID " + userId + " não foi encontrado");
+        throw new ProdutoNaoEncontradoException("Produto com ID " + userId + " não foi encontrado");
     }
 }
 
