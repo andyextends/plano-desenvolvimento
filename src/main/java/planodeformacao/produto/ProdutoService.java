@@ -110,6 +110,15 @@ public class ProdutoService {
         }
         return produtosEncontrados;
     }
+
+    public Produto buscarProdutoPorUsuario(UUID userId) {
+        for (Produto produto : produtos) {
+            if (produto.getId().equals(userId)) {
+                return produto;
+            }
+        }
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Produto com ID " + userId + " não foi encontrado");
+    }
 }
 
 
