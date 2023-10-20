@@ -2,8 +2,8 @@ package planodeformacao.produto;
 
 
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
 
 import java.util.List;
 import java.util.UUID;
@@ -12,6 +12,7 @@ import java.util.UUID;
 @RequestMapping("/api/produtos")
 public class ProdutoController {
 
+    @Autowired
     private final ProdutoService produtoService;
 
     public ProdutoController(ProdutoService produtoService) {
@@ -43,17 +44,33 @@ public class ProdutoController {
         produtoService.deletarProduto(id);
     }
 
+    @SuppressWarnings("unused")
     @GetMapping("/{id}")
     public Produto buscarProdutoPorId(@PathVariable UUID id) {
 
-     return produtoService.buscarProduto(id);
+        return produtoService.buscarProduto(id);
 
     }
-    @GetMapping("/buscar")
+
+    @SuppressWarnings("unused")
+    @GetMapping("/nome{nome}")
     public List<Produto> buscarProdutosPorNome(@RequestParam(name = "nome") String nome) {
 
-    return produtoService.buscarProdutosPorNome(nome);
+        return produtoService.buscarProdutosPorNome(nome);
 
     }
 
+    @SuppressWarnings("unused")
+    @GetMapping("/id{userId}")
+    public Produto buscarprodutoPorUserId(@RequestHeader(name = "userId") String userId) {
+
+        return produtoService.buscarProdutoPorUsuario(UUID.fromString(userId));
+
+    }
 }
+
+
+
+
+
+

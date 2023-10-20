@@ -45,7 +45,6 @@ class ProdutoControllerTest {
         produtos.add(new Produto(UUID.randomUUID(), "Produto 2", 24.99));
         when(produtoService.listarProdutos()).thenReturn(produtos);
         List<Produto> produtosListados = produtoController.listarProdutos();
-        verify(produtoService).listarProdutos();
         verify(produtoService, times(1)).listarProdutos();
         assertEquals(produtosListados.size(), 2);
         assertEquals(produtosListados.get(0).getNome(), "Produto 1");
