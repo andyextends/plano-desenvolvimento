@@ -3,9 +3,11 @@ package planodeformacao.produto;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import planodeformacao.produto.exception.ParametrosInvalidosException;
 import planodeformacao.produto.exception.ProdutoNaoEncontradoException;
+import planodeformacao.produto.repository.ProdutoRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,10 +16,14 @@ import java.util.UUID;
 
 @Service
 public class ProdutoService {
-
-
-    public ProdutoService() {
+    private final ProdutoRepository produtoRepository;
+    @Autowired
+    public ProdutoService(ProdutoRepository produtoRepository) {
+        this.produtoRepository = produtoRepository;
     }
+
+
+
 
     private final Logger logger = LogManager.getLogger(ProdutoService.class);
     private final List<Produto> produtos = new ArrayList<>();
