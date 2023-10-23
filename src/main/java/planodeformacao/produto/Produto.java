@@ -3,11 +3,15 @@ package planodeformacao.produto;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.UUID;
 
 
+@Document(collection = "produtos")
 public class Produto {
+    @Id
     @NotBlank(message = "O nome não pode ser vazio")
     @NotNull(message = "O nome não pode ser null")
     private UUID id;
