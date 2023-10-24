@@ -1,6 +1,7 @@
 package planodeformacao.produto;
 
 
+import jakarta.annotation.PostConstruct;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,16 +18,19 @@ import java.util.UUID;
 @Service
 public class ProdutoService {
     private final ProdutoRepository produtoRepository;
+    private final Logger logger = LogManager.getLogger(ProdutoService.class);
+    private final List<Produto> produtos = new ArrayList<>();
+
     @Autowired
     public ProdutoService(ProdutoRepository produtoRepository) {
         this.produtoRepository = produtoRepository;
     }
 
-
-
-
-    private final Logger logger = LogManager.getLogger(ProdutoService.class);
-    private final List<Produto> produtos = new ArrayList<>();
+    @PostConstruct
+    public void carregarDadosIniciaisDoBancoParaListaLocal() {
+        produtos.clear();
+        produtos.addAll(produtoRepository.findAll());
+    }
 
     public Produto criarProduto(Produto produto) {
 
@@ -34,16 +38,15 @@ public class ProdutoService {
             produto.setId(UUID.randomUUID());
 
         }
-        for (Produto existeProduto : produtos) {
-            if (existeProduto.getId().equals(produto.getId())) {
-                throw new ParametrosInvalidosException("Produto já existe com mesmo ID cadastrado");
-            }
+
+        if (produtos.stream().anyMatch(p -> p.getId().equals(produto.getId()))) {
+            throw new ParametrosInvalidosException("Produto já existe com mesmo ID cadastrado");
         }
 
 
         produtos.add(produto);
         logger.info("Produto cadastrado: " + produto.getId() + " " + produto.getNome() + " " + produto.getPreco());
-        return produto;
+        return produtoRepository.save(produto);
     }
 
     public List<Produto> listarProdutos() {
@@ -51,83 +54,64 @@ public class ProdutoService {
             logger.info("Não existem produtos cadastrados");
             throw new ProdutoNaoEncontradoException("Não existem produtos cadastrados");
         }
-        return produtos;
+        return produtoRepository.findAll();
     }
 
     public Produto buscarProduto(UUID id) {
-        if (id == null) {
-            throw new ParametrosInvalidosException("ID do produto não pode ser nulo.");
-        }
+        return produtoRepository.findById(id)
+                .orElseThrow(() -> new ProdutoNaoEncontradoException("Produto com ID " + id + " não foi encontrado"));
 
-        for (Produto produto : produtos) {
-            UUID idProduto = produto.getId();
-            if (idProduto != null && idProduto.equals(id)) {
-                return produto;
-            }
-        }
-
-        throw new ProdutoNaoEncontradoException("Produto não encontrado com o ID: " + id);
     }
 
     public Produto atualizarProduto(UUID id, Produto produto) {
 
         Produto produtoAtualizado = buscarProduto(id);
-        if (produtoAtualizado != null) {
-            produtoAtualizado.setNome(produto.getNome());
-            produtoAtualizado.setPreco(produto.getPreco());
-            logger.info("Produto atualizado: " + produtoAtualizado.getId() + " " + produtoAtualizado.getNome()
-                    + " " + produtoAtualizado.getPreco());
-            return produtoAtualizado;
-        } else {
 
-            throw new ProdutoNaoEncontradoException(" não encontramos o ID: " + id);
-        }
-
+        produtoAtualizado.setNome(produto.getNome());
+        produtoAtualizado.setPreco(produto.getPreco());
+        logger.info("Produto atualizado: " + produtoAtualizado.getId() + " " + produtoAtualizado.getNome()
+                + " " + produtoAtualizado.getPreco());
+        return produtoRepository.save(produtoAtualizado);
 
     }
 
+
     public void deletarProduto(UUID id) {
         if (id == null) {
-            throw new ParametrosInvalidosException("ID do produto é necessário para realizar a exclusão.");
+            throw new ParametrosInvalidosException("ID não pode ser vazio ou inválido");
         }
         Produto produtoDeletado = buscarProduto(id);
         if (produtoDeletado != null) {
-            if (!produtos.contains(produtoDeletado)) {
-                throw new ParametrosInvalidosException("Produto com ID" + id + "ja foi deletado anteriormente");
-
-            }
+            produtoRepository.delete(produtoDeletado);
             produtos.remove(produtoDeletado);
-            logger.info("ID: " + produtoDeletado.getId() + " " + produtoDeletado.getNome() + " " + produtoDeletado.getPreco() + " foi deletado com sucesso");
-
+            logger.info("Produto com ID: " + id + " foi deletado com sucesso");
         } else {
-            throw new ProdutoNaoEncontradoException("Produto com ID" + id + "não foi encontrado");
+            throw new ProdutoNaoEncontradoException("Produto com ID " + id + " não foi encontrado");
 
         }
     }
 
     public List<Produto> buscarProdutosPorNome(String nome) {
-        List<Produto> produtosEncontrados = new ArrayList<>();
-        boolean produtoEncontrado = false;
-        for (Produto produto : produtos) {
-            if (produto.getNome().equalsIgnoreCase(nome)) {
-                produtosEncontrados.add(produto);
-                produtoEncontrado = true;
-            }
-        }
-        if (!produtoEncontrado) {
+        List<Produto> produtos = produtoRepository.findByNomeIgnoreCase(nome);
+        if (produtos.isEmpty()) {
             throw new ProdutoNaoEncontradoException("Produto com nome " + nome + " não foi encontrado");
         }
-        return produtosEncontrados;
+        return produtos;
     }
 
-    public Produto buscarProdutoPorUsuario(UUID userId) {
-        for (Produto produto : produtos) {
-            if (produto.getId().equals(userId)) {
-                return produto;
-            }
+
+    public Produto buscarProdutoPorUsuario(UUID id) {
+
+        try {
+            UUID uuid = UUID.fromString(id.toString());
+        } catch (IllegalArgumentException e) {
+            throw new ParametrosInvalidosException("ID não pode ser vazio ou inválido");
         }
-        throw new ProdutoNaoEncontradoException("Produto com ID " + userId + " não foi encontrado");
+
+        return produtoRepository.findByUserId(id)
+                .orElseThrow(() -> new ProdutoNaoEncontradoException("Produto com ID " + id+ " não foi encontrado"));
     }
+
 }
 
 
