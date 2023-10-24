@@ -2,141 +2,121 @@ package com.example.planodeformacao;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 import planodeformacao.produto.Produto;
 import planodeformacao.produto.ProdutoService;
+import planodeformacao.produto.exception.ProdutoNaoEncontradoException;
+import planodeformacao.produto.repository.ProdutoRepository;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
+
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
 
 public class ProdutoServiceTest {
+    @InjectMocks
     private ProdutoService produtoService;
-    private List<Produto> produtos;
 
+    @Mock
+    private ProdutoRepository produtoRepository;
 
     @BeforeEach
     public void setUp() {
-        produtos = criarListaProdutos();
-        produtoService = new ProdutoService();
-
-        for (Produto produto : produtos) {
-            produtoService.criarProduto(produto);
-        }
-
-
-    }
-
-    private List<Produto> criarListaProdutos() {
-        List<Produto> lista = new ArrayList<>();
-        lista.add(new Produto(UUID.randomUUID(), "Produto 1", 10.0));
-        lista.add(new Produto(UUID.randomUUID(), "Produto 2", 20.0));
-        lista.add(new Produto(UUID.randomUUID(), "Produto 3", 30.0));
-        lista.add(new Produto(UUID.randomUUID(), "Produto 4", 40.0));
-        lista.add(new Produto(UUID.randomUUID(), "Produto 5", 50.0));
-
-        return lista;
-
+        MockitoAnnotations.initMocks(this);
     }
 
     @Test
-    void criarProdutoDaLista() {
-        List<Produto> produtos = produtoService.listarProdutos();
-        Produto produto = new Produto(null, "Produto 6", 60.0);
-        produtoService.criarProduto(produto);
-        assertEquals(produtos.size(), 6);
-        assertEquals(produto.getNome(), "Produto 6");
-        assertEquals(produto.getPreco(), 60.0);
+    public void testCriarProduto() {
+        Produto produto = new Produto(null, "Produto 1", 10.0);
+        when(produtoRepository.save(produto)).thenReturn(produto);
+        Produto produtoSalvo = produtoService.criarProduto(produto);
+        assertNotNull(produtoSalvo.getId());
+        assertEquals(produto.getNome(), produtoSalvo.getNome());
+        assertEquals(produto.getPreco(), produtoSalvo.getPreco());
+        verify(produtoRepository, times(1)).save(produto);
     }
 
     @Test
-    void atualizarProdutoDaLista() {
-        List<Produto> produtos = produtoService.listarProdutos();
-        Produto produto = produtos.get(4);
-        produto.setNome("Produto 5 atualizado");
-        produto.setPreco(99.99);
-        produtoService.atualizarProduto(produto.getId(), produto);
-        assertEquals(produtos.size(), 5);
-        assertEquals(produto.getNome(), "Produto 5 atualizado");
-        assertEquals(produto.getPreco(), 99.99);
+    public void testListarProdutosSemProdutos() {
 
-
-    }
-
-    @Test
-    void retornarListaDeProdutos() {
-        List<Produto> produtos = produtoService.listarProdutos();
-        assertEquals(produtos, this.produtos);
-        assertEquals(produtos.size(), 5);
-
-
-    }
-
-    @Test
-    void removerProdutoDaLista() {
-
-        List<Produto> produtos = produtoService.listarProdutos();
-        Produto produto = produtos.get(4);
-        produtoService.deletarProduto(produto.getId());
-        assertEquals(4, produtos.size());
-
-
-    }
-
-
-    @Test
-    void buscarProdutoDaLista() {
-        List<Produto> produtos = produtoService.listarProdutos();
-        Produto produto = produtos.get(4);
-        assertEquals(produtos.size(), 5);
-        assertEquals(produto.getNome(), "Produto 5");
-        assertEquals(produto.getPreco(), 50.0);
-
-    }
-
-    @Test
-    void buscarProdutoDaListaPorId() {
-        List<Produto> produtos = produtoService.listarProdutos();
-        Produto produto = produtos.get(4);
-        assertEquals(produtos.size(), 5);
-        assertEquals(produto.getNome(), "Produto 5");
-        assertEquals(produto.getPreco(), 50.0);
-
-    }
-
-
-    @Test
-    void atualizarProdutoNaoEncontrado() {
-        assertThrows(RuntimeException.class, () -> {
-
-            produtoService.atualizarProduto(UUID.randomUUID(), new Produto(null, "Produto Inexistente", 60.0));
+        when(produtoRepository.findAll()).thenReturn(new ArrayList<>());
+        assertThrows(ProdutoNaoEncontradoException.class, () -> {
+            produtoService.listarProdutos();
+            assertTrue(produtoService.listarProdutos().isEmpty());
+            verify(produtoRepository, times(1)).findAll();
         });
 
 
     }
 
+
     @Test
-    void NaoExisteProdutoNaLista() {
+    public void testBuscarProduto() {
+        UUID id = UUID.randomUUID();
+        Produto produto = new Produto(id, "Produto 1", 10.0);
+        when(produtoRepository.findById(id)).thenReturn(Optional.of(produto));
+        Produto produtoEncontrado = produtoService.buscarProduto(id);
+        assertNotNull(produtoEncontrado);
+        assertEquals(produto.getId(), produtoEncontrado.getId());
+        verify(produtoRepository, times(1)).findById(id);
+    }
 
-        List<Produto> produtos = produtoService.listarProdutos();
-        Produto produto = produtos.get(4);
-        produtoService.deletarProduto(produto.getId());
-        produtoService.buscarProduto(produto.getId());
-        assertEquals(4, produtos.size());
-        assertEquals(produto.getNome(), "Produto 5");
-        assertEquals(produto.getPreco(), 50.0);
-        assertTrue(produtoService.buscarProduto(produto.getId()) == null);
-
+    @Test
+    public void testAtualizarProduto() {
+        UUID id = UUID.randomUUID();
+        Produto produto = new Produto(id, "Produto 1", 10.0);
+        Produto produtoAtualizado = new Produto(id, "Produto Atualizado", 20.0);
+        when(produtoRepository.findById(id)).thenReturn(Optional.of(produto));
+        when(produtoRepository.save(produto)).thenReturn(produtoAtualizado);
+        Produto produtoAtualizadoResult = produtoService.atualizarProduto(id, produtoAtualizado);
+        assertNotNull(produtoAtualizadoResult);
+        assertEquals(produtoAtualizado, produtoAtualizadoResult);
+        verify(produtoRepository, times(1)).findById(id);
+        verify(produtoRepository, times(1)).save(produto);
 
     }
 
+    @Test
+    public void testDeletarProduto() {
+        UUID id = UUID.randomUUID();
+        Produto produto = new Produto(id, "Produto 1", 10.0);
 
+        when(produtoRepository.findById(id)).thenReturn(Optional.of(produto));
+        produtoService.deletarProduto(id);
+        verify(produtoRepository, times(1)).delete(produto);
+        verify(produtoRepository, times(1)).findById(id);
+
+    }
+
+    @Test
+    public void testBuscarProdutoPorNome() {
+        String nome = "Produto 1";
+        List<Produto> produtos = Arrays.asList(new Produto(null, nome, 10.0));
+        when(produtoRepository.findByNomeIgnoreCase(nome)).thenReturn(produtos);
+        List<Produto> produtosEncontrados = produtoService.buscarProdutosPorNome(nome);
+        assertNotNull(produtosEncontrados);
+        assertEquals(produtos, produtosEncontrados);
+        verify(produtoRepository, times(1)).findByNomeIgnoreCase(nome);
+    }
+
+    @Test
+    public void testBuscarProdutoPorUsuario() {
+        UUID id = UUID.randomUUID();
+        Produto produto = new Produto(id, "Produto 1", 10.0);
+
+        when(produtoRepository.findByUserId(id)).thenReturn(Optional.of(produto));
+        Produto produtoEncontrado = produtoService.buscarProdutoPorUsuario(id);
+        assertNotNull(produtoEncontrado);
+        assertEquals(produto, produtoEncontrado);
+        verify(produtoRepository, times(1)).findByUserId(id);
+    }
 }
-
-
-
-
 
 
 
