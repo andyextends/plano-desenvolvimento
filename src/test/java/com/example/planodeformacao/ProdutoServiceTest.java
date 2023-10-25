@@ -2,18 +2,15 @@ package com.example.planodeformacao;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.mockito.junit.jupiter.MockitoExtension;
 import planodeformacao.produto.Produto;
 import planodeformacao.produto.ProdutoService;
 import planodeformacao.produto.exception.ProdutoNaoEncontradoException;
 import planodeformacao.produto.repository.ProdutoRepository;
 
 import java.util.*;
-
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
