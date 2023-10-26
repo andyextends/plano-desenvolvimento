@@ -8,6 +8,7 @@ class PlanoDeFormacaoApplicationTests {
 
 	@Test
 	void contextLoads() {
+
 	}
 
 }

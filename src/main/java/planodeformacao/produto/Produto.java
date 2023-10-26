@@ -12,30 +12,28 @@ import java.util.UUID;
 public class Produto {
 
     @NotBlank(message = "O nome não pode ser vazio")
-    @NotNull(message = "O nome não pode ser null")
-    private  UUID id;
+    private String id;
     @NotBlank(message = "O nome não pode ser vazio")
-    @NotNull(message = "O nome não pode ser null")
     private String nome;
-    @NotBlank(message = "O preço não pode ser null")
+    @NotNull(message = "O preço não pode ser null")
     @DecimalMin(value = "0.0", inclusive = false, message = "O preço deve ser maior que zero")
     private double preco;
 
-    public Produto() {
-    }
-
-
-    public Produto(UUID id, String nome, double preco) {
+    public Produto(String id, String nome, double preco) {
         this.id = id;
         this.nome = nome;
         this.preco = preco;
     }
 
-    public UUID getId() {
+    public Produto() {
+
+    }
+
+    public String getId() {
         return id;
     }
 
-    public void setId(UUID id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -55,3 +53,4 @@ public class Produto {
         this.preco = preco;
     }
 }
+

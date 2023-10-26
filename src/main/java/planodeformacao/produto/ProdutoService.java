@@ -29,7 +29,7 @@ public class ProdutoService {
     public Produto criarProduto(Produto produto) {
 
         if (produto.getId() == null) {
-            produto.setId(UUID.randomUUID());
+            produto.setId(String.valueOf(UUID.fromString(UUID.randomUUID().toString())));
         } else if (produtoRepository.findById(produto.getId()).isPresent()) {
             throw new ParametrosInvalidosException("Produto já existe com mesmo ID cadastrado");
         }
@@ -48,34 +48,36 @@ public class ProdutoService {
         return produtos;
     }
 
-    public Produto buscarProduto(UUID id) {
+    public Produto buscarProduto(String id) {
         return produtoRepository.findById(id)
                 .orElseThrow(() -> new ProdutoNaoEncontradoException("Produto com ID " + id + " não foi encontrado"));
 
     }
 
-    public Produto atualizarProduto(UUID id, Produto produto) {
-        Produto produtoExistente = produtoRepository.findById(id)
-                .orElseThrow(() -> new ProdutoNaoEncontradoException("Produto com ID " + id + " não foi encontrado"));
-        if(!produto.getNome().equals(produtoExistente.getNome()) || produto.getPreco() != produtoExistente.getPreco()) {
-            produtoExistente.setNome(produto.getNome());
-            produtoExistente.setPreco(produto.getPreco());
-            logger.info("Produto atualizado: " + produtoExistente.getId() + " "
-                    + produtoExistente.getNome() + " " + produtoExistente.getPreco());
-            return produtoRepository.save(produtoExistente);
-        } else {
-            logger.info("Produto não atualizado: " + produtoExistente.getId() + " "
-                    + produtoExistente.getNome() + " " + produtoExistente.getPreco());
-            throw new ParametrosInvalidosException("Produto já existe com mesmo nome e preço cadastrado");
-        }
+    public Produto atualizarProduto( String id, Produto produto) {
+        Optional<Produto> produtoExistenteOptional = produtoRepository.findById(id);
+        if (produtoExistenteOptional.isPresent()) {
+            Produto produtoExistente = produtoExistenteOptional.get();
 
+            if (!produto.getNome().equals(produtoExistente.getNome()) || produto.getPreco() != produtoExistente.getPreco()) {
+                produtoExistente.setNome(produto.getNome());
+                produtoExistente.setPreco(produto.getPreco());
+                logger.info("Produto atualizado: " + produtoExistente.getId() + " "
+                        + produtoExistente.getNome() + " " + produtoExistente.getPreco());
+                return produtoRepository.save(produtoExistente);
+            } else {
+                logger.info("Produto não atualizado: " + produtoExistente.getId() + " "
+                        + produtoExistente.getNome() + " " + produtoExistente.getPreco());
+                throw new ParametrosInvalidosException("Produto já existe com mesmo nome e preço cadastrado");
+            }
+
+        } else {
+            throw new ProdutoNaoEncontradoException("Produto com Id " + id + "não foi encontrado");
+        }
     }
 
 
-    public void deletarProduto(UUID id) {
-        if (id == null) {
-            throw new ParametrosInvalidosException("ID não pode ser vazio ou inválido");
-        }
+    public void deletarProduto(String id) {
         Optional<Produto> produtoOptional = produtoRepository.findById(id);
         if (produtoOptional.isPresent()) {
             Produto produtoDeletado = produtoOptional.get();
@@ -90,7 +92,7 @@ public class ProdutoService {
 
     }
 
-        public List<Produto> buscarProdutosPorNome(String nome) {
+    public List<Produto> buscarProdutosPorNome(String nome) {
         List<Produto> produtos = produtoRepository.findByNomeIgnoreCase(nome);
         if (produtos.isEmpty()) {
             throw new ProdutoNaoEncontradoException("Produto com nome " + nome + " não foi encontrado");
@@ -99,23 +101,19 @@ public class ProdutoService {
     }
 
 
-    public Produto buscarProdutoPorUsuario(UUID id) {
-
+    public Produto buscarProdutoPorUsuario(String id) {
+        UUID uuid;
         try {
-            UUID uuid = UUID.fromString(id.toString());
+            uuid = UUID.fromString(id.toString());
         } catch (IllegalArgumentException e) {
             throw new ParametrosInvalidosException("ID não pode ser vazio ou inválido");
         }
 
-        return produtoRepository.findByUserId(id)
+        return produtoRepository.findByUserId(uuid.toString())
                 .orElseThrow(() -> new ProdutoNaoEncontradoException("Produto com ID " + id + " não foi encontrado"));
     }
 
 }
-
-
-
-
 
 
 
