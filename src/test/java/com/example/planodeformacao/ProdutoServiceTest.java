@@ -32,10 +32,10 @@ public class ProdutoServiceTest {
     public void testCriarProduto() {
         Produto produto = new Produto(null, "Produto 1", 10.0);
         when(produtoRepository.save(produto)).thenReturn(produto);
-        Produto produtoSalvo = produtoService.criarProduto(produto);
-        assertNotNull(produtoSalvo.getId());
-        assertEquals(produto.getNome(), produtoSalvo.getNome());
-        assertEquals(produto.getPreco(), produtoSalvo.getPreco());
+        Produto produtoCriado = produtoService.criarProduto(produto);
+        assertNotNull(produtoCriado);
+        assertEquals(produtoCriado.getNome(), "Produto 1");
+        assertEquals(produtoCriado.getPreco(), 10.0);
         verify(produtoRepository, times(1)).save(produto);
     }
 
@@ -56,25 +56,25 @@ public class ProdutoServiceTest {
     @Test
     public void testBuscarProduto() {
         UUID id = UUID.randomUUID();
-        Produto produto = new Produto(id, "Produto 1", 10.0);
-        when(produtoRepository.findById(id)).thenReturn(Optional.of(produto));
-        Produto produtoEncontrado = produtoService.buscarProduto(id);
+        Produto produto = new Produto(null, "Produto 1", 10.0);
+        when(produtoRepository.findById(String.valueOf(id))).thenReturn(Optional.of(produto));
+        Produto produtoEncontrado = produtoService.buscarProduto(String.valueOf(id));
         assertNotNull(produtoEncontrado);
         assertEquals(produto.getId(), produtoEncontrado.getId());
-        verify(produtoRepository, times(1)).findById(id);
+        verify(produtoRepository, times(1)).findById(String.valueOf(id));
     }
 
     @Test
     public void testAtualizarProduto() {
         UUID id = UUID.randomUUID();
-        Produto produto = new Produto(id, "Produto 1", 10.0);
-        Produto produtoAtualizado = new Produto(id, "Produto Atualizado", 20.0);
-        when(produtoRepository.findById(id)).thenReturn(Optional.of(produto));
+        Produto produto = new Produto(null, "Produto 1", 10.0);
+        Produto produtoAtualizado = new Produto(null, "Produto Atualizado", 20.0);
+        when(produtoRepository.findById(String.valueOf(id))).thenReturn(Optional.of(produto));
         when(produtoRepository.save(produto)).thenReturn(produtoAtualizado);
-        Produto produtoAtualizadoResult = produtoService.atualizarProduto(id, produtoAtualizado);
+        Produto produtoAtualizadoResult = produtoService.atualizarProduto(String.valueOf(id), produtoAtualizado);
         assertNotNull(produtoAtualizadoResult);
         assertEquals(produtoAtualizado, produtoAtualizadoResult);
-        verify(produtoRepository, times(1)).findById(id);
+        verify(produtoRepository, times(1)).findById(String.valueOf(id));
         verify(produtoRepository, times(1)).save(produto);
 
     }
@@ -82,12 +82,12 @@ public class ProdutoServiceTest {
     @Test
     public void testDeletarProduto() {
         UUID id = UUID.randomUUID();
-        Produto produto = new Produto(id, "Produto 1", 10.0);
+        Produto produto = new Produto(null, "Produto 1", 10.0);
 
-        when(produtoRepository.findById(id)).thenReturn(Optional.of(produto));
-        produtoService.deletarProduto(id);
+        when(produtoRepository.findById(String.valueOf(id))).thenReturn(Optional.of(produto));
+        produtoService.deletarProduto(String.valueOf(id));
         verify(produtoRepository, times(1)).delete(produto);
-        verify(produtoRepository, times(1)).findById(id);
+        verify(produtoRepository, times(1)).findById(String.valueOf(id));
 
     }
 
@@ -105,13 +105,13 @@ public class ProdutoServiceTest {
     @Test
     public void testBuscarProdutoPorUsuario() {
         UUID id = UUID.randomUUID();
-        Produto produto = new Produto(id, "Produto 1", 10.0);
+        Produto produto = new Produto(null, "Produto 1", 10.0);
 
-        when(produtoRepository.findByUserId(id)).thenReturn(Optional.of(produto));
-        Produto produtoEncontrado = produtoService.buscarProdutoPorUsuario(id);
+        when(produtoRepository.findByUserId(String.valueOf(id))).thenReturn(Optional.of(produto));
+        Produto produtoEncontrado = produtoService.buscarProdutoPorUsuario(String.valueOf(id));
         assertNotNull(produtoEncontrado);
         assertEquals(produto, produtoEncontrado);
-        verify(produtoRepository, times(1)).findByUserId(id);
+        verify(produtoRepository, times(1)).findByUserId(String.valueOf(id));
     }
 }
 

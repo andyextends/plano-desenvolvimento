@@ -2,12 +2,13 @@ package planodeformacao.produto;
 
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.UUID;
-
+@Validated
 @RestController
 @RequestMapping("/api/produtos")
 public class ProdutoController {
@@ -21,7 +22,7 @@ public class ProdutoController {
     }
 
     @PostMapping
-    public Produto criarProduto(@RequestBody Produto produto) {
+    public Produto criarProduto(@Valid @RequestBody Produto produto) {
 
         return produtoService.criarProduto(produto);
     }
@@ -33,27 +34,27 @@ public class ProdutoController {
     }
 
     @PutMapping("/{id}")
-    public Produto atualizarProduto(@Valid @PathVariable UUID id, @RequestBody Produto produto) {
+    public Produto atualizarProduto(@Valid @PathVariable String id, @RequestBody Produto produto) {
 
         return produtoService.atualizarProduto(id, produto);
     }
 
     @DeleteMapping("/{id}")
-    public void deletarProduto(@Valid @PathVariable UUID id) {
+    public void deletarProduto(@NotBlank @PathVariable String id) {
 
         produtoService.deletarProduto(id);
     }
 
     @SuppressWarnings("unused")
     @GetMapping("/{id}")
-    public Produto buscarProdutoPorId(@Valid @PathVariable UUID id) {
+    public Produto buscarProdutoPorId(@NotBlank @PathVariable String id) {
 
         return produtoService.buscarProduto(id);
 
     }
 
     @SuppressWarnings("unused")
-    @GetMapping("/nome{nome}")
+    @GetMapping("/nome")
     public List<Produto> buscarProdutosPorNome(@Valid @RequestParam(name = "nome") String nome) {
 
         return produtoService.buscarProdutosPorNome(nome);
@@ -61,10 +62,10 @@ public class ProdutoController {
     }
 
     @SuppressWarnings("unused")
-    @GetMapping("/id{userId}")
-    public Produto buscarprodutoPorUserId(@Valid @RequestHeader(name = "userId") String userId) {
+    @GetMapping("/id")
+    public Produto buscarprodutoPorUserId( @Valid @RequestHeader(name = "id") String userId) {
 
-        return produtoService.buscarProdutoPorUsuario(UUID.fromString(userId));
+        return produtoService.buscarProdutoPorUsuario(userId);
 
     }
 }

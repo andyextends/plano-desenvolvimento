@@ -17,7 +17,7 @@ public class Camisa extends Produto {
         super();
     }
 
-    public Camisa(UUID id, String nome, double preco, String tamanho, String cor, TipoGola tipoGola) {
+    public Camisa(String id, String nome, double preco, String tamanho, String cor, TipoGola tipoGola) {
         super(id, nome, preco);
         this.tamanho = tamanho;
         this.cor = cor;
