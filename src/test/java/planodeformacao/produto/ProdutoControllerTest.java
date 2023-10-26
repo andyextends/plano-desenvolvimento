@@ -4,7 +4,10 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import planodeformacao.produto.controller.ProdutoController;
 import planodeformacao.produto.exception.ProdutoNaoEncontradoException;
+import planodeformacao.produto.model.Produto;
+import planodeformacao.produto.service.ProdutoService;
 
 import java.util.ArrayList;
 import java.util.List;

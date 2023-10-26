@@ -1,4 +1,4 @@
-package planodeformacao.produto;
+package planodeformacao.produto.model;
 
 public enum TipoGola {
 
