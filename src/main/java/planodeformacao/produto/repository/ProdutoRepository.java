@@ -3,12 +3,11 @@ package planodeformacao.produto.repository;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
-import planodeformacao.produto.Produto;
+import planodeformacao.produto.model.Produto;
 
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 public interface ProdutoRepository extends MongoRepository<Produto, String> {
     Optional<Produto> findById(String id);

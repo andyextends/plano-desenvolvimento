@@ -1,4 +1,4 @@
-package planodeformacao.produto;
+package planodeformacao.produto.controller;
 
 
 import jakarta.validation.Valid;
@@ -6,6 +6,8 @@ import jakarta.validation.constraints.NotBlank;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import planodeformacao.produto.model.Produto;
+import planodeformacao.produto.service.ProdutoService;
 
 import java.util.List;
 @Validated
@@ -22,7 +24,7 @@ public class ProdutoController {
     }
 
     @PostMapping
-    public Produto criarProduto(@Valid @RequestBody Produto produto) {
+    public Produto criarProduto(@RequestBody Produto produto) {
 
         return produtoService.criarProduto(produto);
     }
@@ -34,7 +36,7 @@ public class ProdutoController {
     }
 
     @PutMapping("/{id}")
-    public Produto atualizarProduto(@Valid @PathVariable String id, @RequestBody Produto produto) {
+    public Produto atualizarProduto(@NotBlank @PathVariable String id, @Valid @RequestBody Produto produto) {
 
         return produtoService.atualizarProduto(id, produto);
     }

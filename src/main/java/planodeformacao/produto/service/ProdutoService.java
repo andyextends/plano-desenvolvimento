@@ -1,4 +1,4 @@
-package planodeformacao.produto;
+package planodeformacao.produto.service;
 
 
 import org.apache.logging.log4j.LogManager;
@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import planodeformacao.produto.exception.ParametrosInvalidosException;
 import planodeformacao.produto.exception.ProdutoNaoEncontradoException;
+import planodeformacao.produto.model.Produto;
 import planodeformacao.produto.repository.ProdutoRepository;
 
 import java.util.List;
@@ -16,11 +17,12 @@ import java.util.UUID;
 
 @Service
 public class ProdutoService {
+    @Autowired
     private final ProdutoRepository produtoRepository;
     private final Logger logger = LogManager.getLogger(ProdutoService.class);
 
 
-    @Autowired
+
     public ProdutoService(ProdutoRepository produtoRepository) {
         this.produtoRepository = produtoRepository;
     }
