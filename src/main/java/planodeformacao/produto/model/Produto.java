@@ -9,7 +9,6 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document(collection = "produtos")
 public class Produto {
 
-    @NotBlank(message = "O id não pode ser vazio")
     private String id;
     @NotBlank(message = "O nome não pode ser vazio")
     private String nome;

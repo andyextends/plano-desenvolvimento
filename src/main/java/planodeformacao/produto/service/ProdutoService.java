@@ -22,7 +22,6 @@ public class ProdutoService {
     private final Logger logger = LogManager.getLogger(ProdutoService.class);
 
 
-
     public ProdutoService(ProdutoRepository produtoRepository) {
         this.produtoRepository = produtoRepository;
     }
@@ -51,12 +50,14 @@ public class ProdutoService {
     }
 
     public Produto buscarProduto(String id) {
+
         return produtoRepository.findById(id)
                 .orElseThrow(() -> new ProdutoNaoEncontradoException("Produto com ID " + id + " não foi encontrado"));
 
     }
 
-    public Produto atualizarProduto( String id, Produto produto) {
+    public Produto atualizarProduto(String id, Produto produto) {
+
         Optional<Produto> produtoExistenteOptional = produtoRepository.findById(id);
         if (produtoExistenteOptional.isPresent()) {
             Produto produtoExistente = produtoExistenteOptional.get();
@@ -74,12 +75,16 @@ public class ProdutoService {
             }
 
         } else {
-            throw new ProdutoNaoEncontradoException("Produto com Id " + id + "não foi encontrado");
+            throw new ProdutoNaoEncontradoException("Produto com Id " + id + " não foi encontrado");
         }
     }
 
 
     public void deletarProduto(String id) {
+        if (id == null || id.trim().isEmpty()) {
+            throw new ParametrosInvalidosException("Forneça ID  valido");
+        }
+
         Optional<Produto> produtoOptional = produtoRepository.findById(id);
         if (produtoOptional.isPresent()) {
             Produto produtoDeletado = produtoOptional.get();
@@ -95,6 +100,9 @@ public class ProdutoService {
     }
 
     public List<Produto> buscarProdutosPorNome(String nome) {
+        if (nome == null || nome.trim().isEmpty()) {
+            throw new ParametrosInvalidosException("Forneça um nome ");
+        }
         List<Produto> produtos = produtoRepository.findByNomeIgnoreCase(nome);
         if (produtos.isEmpty()) {
             throw new ProdutoNaoEncontradoException("Produto com nome " + nome + " não foi encontrado");
@@ -104,6 +112,9 @@ public class ProdutoService {
 
 
     public Produto buscarProdutoPorUsuario(String id) {
+        if (id == null || id.trim().isEmpty()) {
+            throw new ParametrosInvalidosException("Forneça um id ");
+        }
         UUID uuid;
         try {
             uuid = UUID.fromString(id.toString());
