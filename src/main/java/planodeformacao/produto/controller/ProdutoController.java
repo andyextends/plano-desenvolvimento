@@ -15,7 +15,12 @@ import planodeformacao.produto.service.ProdutoService;
 
 import java.util.List;
 
-//@Api(value = "API de Produtos")
+@ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Sucesso"),
+        @ApiResponse(responseCode = "400", description = "Requisição inválida"),
+        @ApiResponse(responseCode = "404", description = "Não encontrado"),
+        @ApiResponse(responseCode = "500", description = "Erro interno do servidor")})
+@Tag(name = "Produto", description = "API de produtos")
 @Validated
 @RestController
 @RequestMapping("/api/produtos")
@@ -29,50 +34,50 @@ public class ProdutoController {
         this.produtoService = produtoService;
     }
 
-
+    @Operation(summary = "Cria um novo produto",
+            description = "Esta opção cria um novo o produto e inclui no nosso cadastrado .")
     @PostMapping
-    @Tag(name = "Produto", description = "Cria um produto")
-    public Produto criarProduto(@RequestBody Produto produto) {
+    public Produto criarProduto(@Valid @RequestBody Produto produto) {
 
         return produtoService.criarProduto(produto);
     }
 
-
+    @Operation(summary = "Lista todos produtos",
+            description = "Esta opção lista todos o produtos que temos cadastrados .")
     @GetMapping
-    @Tag(name = "Produto", description = "Lista todos os produtos")
     public List<Produto> listarProdutos() {
 
         return produtoService.listarProdutos();
     }
 
-
+    @Operation(summary = "Atualiza por ID o produto",
+            description = "Ao incluir um id no path da url o produto pode ser editado e atualizado .")
     @PutMapping("/{id}")
-    @Tag(name = "Produto", description = "Atualiza um produto")
     public Produto atualizarProduto(@NotBlank @PathVariable String id, @Valid @RequestBody Produto produto) {
 
         return produtoService.atualizarProduto(id, produto);
     }
 
-
+    @Operation(summary = "Deleta por ID o produto",
+            description = "Ao incluir um id no path da url o produto pode ser deletado .")
     @DeleteMapping("/{id}")
-    @Tag(name = "Produto", description = "Deleta um produto")
     public void deletarProduto(@NotBlank @PathVariable String id) {
 
         produtoService.deletarProduto(id);
     }
 
-
+    @Operation(summary = "Buscar por ID o produto",
+            description = "Ao incluir um id no path da url retorna dados do produto.")
     @GetMapping("/{id}")
-    @Tag(name = "Produto", description = "Busca por ID do produto")
     public Produto buscarProdutoPorId(@NotBlank @PathVariable String id) {
 
         return produtoService.buscarProduto(id);
 
     }
 
-
+    @Operation(summary = "Busca por Nome o produto",
+            description = "Ao fazer a busca do Nome de um produto retorna dados deste produto.")
     @GetMapping("/nome")
-    @Tag(name = "Produto", description = "Busca por nome do produto")
     public List<Produto> buscarProdutosPorNome(@Valid @RequestParam(name = "nome") String nome) {
 
         return produtoService.buscarProdutosPorNome(nome);
@@ -80,8 +85,9 @@ public class ProdutoController {
     }
 
 
+    @Operation(summary = "Busca por ID do produto",
+            description = "Ao fazer a busca do Id no header retorna dados deste produto.")
     @GetMapping("/id")
-    @Tag(name = "Produto", description = "Busca por ID do produto")
     public Produto buscarprodutoPorUserId(@Valid @RequestHeader(name = "id") String userId) {
 
         return produtoService.buscarProdutoPorUsuario(userId);

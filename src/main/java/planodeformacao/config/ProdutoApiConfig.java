@@ -12,9 +12,9 @@ public class ProdutoApiConfig {
     public OpenAPI customOpenApi() {
         return new OpenAPI()
                 .info(new io.swagger.v3.oas.models.info.Info()
-                        .title("API Plano de Formacao - Esta API permite gerenciar produtos e praticar os conceitos de Spring Boot")
+                        .title("API Plano de Formacao ")
                         .version("V1")
-                        .description("API de Produtos"));
+                        .description("Esta API permite gerenciar produtos e praticar os conceitos de Spring Boot"));
 
     }
 }
